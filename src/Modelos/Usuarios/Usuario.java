@@ -1,5 +1,8 @@
+package Modelos.Usuarios;
+
 import java.time.LocalDateTime;
 import java.util.List;
+import Enum.TipoCliente;
 
 public abstract class Usuario {
 /// ATRIBUTOS
@@ -9,22 +12,22 @@ public abstract class Usuario {
     private String mail;
     private String contrasena;
     private String numeroTelefonico;
-    private String tipoDeUsuario;
     private LocalDateTime fechaDeRegistro;
     private float valoracion;
+    private TipoCliente tipoCliente;
 
     /// CONSTRUCTORES.
 
-    public Usuario(int id, float valoracion, LocalDateTime fechaDeRegistro, String tipoDeUsuario, String numeroTelefonico, String mail, String nombre, String contrasena) {
+    public Usuario(int id, float valoracion, LocalDateTime fechaDeRegistro, String numeroTelefonico, String mail, String nombre, String contrasena, TipoCliente tipoCliente) {
         this.id = count++;
         this.valoracion = valoracion;
         this.fechaDeRegistro = fechaDeRegistro;
-        this.tipoDeUsuario = tipoDeUsuario;
         this.numeroTelefonico = numeroTelefonico;
         this.mail = mail;
         this.nombre = nombre;
         this.count = count;
         this.contrasena = contrasena;
+        this.tipoCliente = tipoCliente;
     }
 
     ///  GETTERS AND SETTERS
@@ -61,15 +64,7 @@ public abstract class Usuario {
         this.numeroTelefonico = numeroTelefonico;
     }
 
-    public String getTipoDeUsuario() {
-        return tipoDeUsuario;
-    }
-
-    public void setTipoDeUsuario(String tipoDeUsuario) {
-        this.tipoDeUsuario = tipoDeUsuario;
-    }
-
-    public LocalDateTime getFechaDeRegistro() {
+   public LocalDateTime getFechaDeRegistro() {
         return fechaDeRegistro;
     }
 
@@ -95,7 +90,7 @@ public abstract class Usuario {
                 ", mail='" + mail + '\'' +
                 ", contrasena='" + contrasena + '\'' +
                 ", numeroTelefonico='" + numeroTelefonico + '\'' +
-                ", tipoDeUsuario='" + tipoDeUsuario + '\'' +
+                ", tipoDeUsuario='" + tipoCliente + '\'' +
                 ", fechaDeRegistro=" + fechaDeRegistro +
                 ", valoracion=" + valoracion +
                 '}';
@@ -131,5 +126,5 @@ public abstract class Usuario {
         }
     }
 
-    public abstract List<String> verReservas (int idUsuario);
+
 }
