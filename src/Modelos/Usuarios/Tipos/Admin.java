@@ -9,7 +9,7 @@ public class Admin extends Usuario {
     ///  SIN ATRIBUTOS
     /// Constructor
     public Admin(int id, float valoracion, LocalDateTime fechaDeRegistro, String numeroTelefonico, String mail, String nombre, String contrasena, TipoCliente tipoCliente) {
-        super(id, valoracion, fechaDeRegistro, numeroTelefonico, mail, nombre, contrasena, tipoCliente);
+        super(valoracion, fechaDeRegistro, numeroTelefonico, mail, nombre, contrasena, tipoCliente);
     }
 
     /// METODOS

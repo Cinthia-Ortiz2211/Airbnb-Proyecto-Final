@@ -7,7 +7,7 @@ import Enum.TipoCliente;
 public abstract class Usuario {
 /// ATRIBUTOS
     private int id;
-    private int count;
+    private static int count = 0;
     private String nombre;
     private String mail;
     private String contrasena;
@@ -18,14 +18,13 @@ public abstract class Usuario {
 
     /// CONSTRUCTORES.
 
-    public Usuario(int id, float valoracion, LocalDateTime fechaDeRegistro, String numeroTelefonico, String mail, String nombre, String contrasena, TipoCliente tipoCliente) {
-        this.id = count++;
+    public Usuario(float valoracion, LocalDateTime fechaDeRegistro, String numeroTelefonico, String mail, String nombre, String contrasena, TipoCliente tipoCliente) {
+        this.id = ++count;
         this.valoracion = valoracion;
         this.fechaDeRegistro = fechaDeRegistro;
         this.numeroTelefonico = numeroTelefonico;
         this.mail = mail;
         this.nombre = nombre;
-        this.count = count;
         this.contrasena = contrasena;
         this.tipoCliente = tipoCliente;
     }
@@ -78,6 +77,10 @@ public abstract class Usuario {
 
     public void setValoracion(float valoracion) {
         this.valoracion = valoracion;
+    }
+
+    public int getId() {
+        return id;
     }
 
     /// ToString
