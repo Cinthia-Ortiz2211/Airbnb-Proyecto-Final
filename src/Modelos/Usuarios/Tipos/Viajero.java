@@ -1,9 +1,16 @@
 package Modelos.Usuarios.Tipos;
 
+import Modelos.Alojamientos.Alojamiento;
+import Modelos.Gestores.GestorAlojamientos;
+import Modelos.Gestores.GestorResenas;
+import Modelos.Gestores.GestorReservas;
+import Modelos.Resenas.Resena;
 import Modelos.Usuarios.Usuario;
 import Enum.TipoCliente;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 public class Viajero extends Usuario {
     /// CONSTRUCTOR
@@ -12,20 +19,48 @@ public class Viajero extends Usuario {
     }
 
     ///  METODOS
-    public void buscarAlojamiento(){
 
+    // Buscar alojamiento por tipo (ej: casa, depto)
+    public void buscarAlojamiento(GestorAlojamientos gestorAlojamientos, String tipoBuscado) {
+        List<Alojamiento> lista = gestorAlojamientos.listar();
+        boolean encontrado = false;
+        for (Alojamiento a : lista) {
+            if (a.getTipo().equalsIgnoreCase(tipoBuscado)) {
+                System.out.println(a);
+                encontrado = true;
+            }
+        }
+        if (!encontrado) {
+            System.out.println("No se encontraron alojamientos del tipo: " + tipoBuscado);
+        }
     }
 
-    public void filtrarAlojamientos(){
-
+    // Filtrar alojamientos por precio
+    public void filtrarAlojamientos(GestorAlojamientos gestorAlojamientos, float precioMax) {
+        List<Alojamiento> lista = gestorAlojamientos.listar();
+        boolean encontrado = false;
+        for (Alojamiento a : lista) {
+            if (a.getPrecioPorNoche() <= precioMax) {
+                System.out.println(a);
+                encontrado = true;
+            }
+        }
+        if (!encontrado) {
+            System.out.println("No se encontraron alojamientos con precio menor o igual a " + precioMax);
+        }
     }
 
-    public void verHistorialDeReservas (int idUsuario){
-
+    // Mostrar historial de reservas del viajero
+    public void verHistorialDeReservas(GestorReservas gestorReservas, int idViajero) {
+        System.out.println("=== Historial de reservas del viajero ID: " + idViajero + " ===");
+        gestorReservas.listarReservasPorViajero(idViajero);
     }
 
-    public void enviarResena(int idResena){
-
-
+    // MAdnar una reseña
+    public void enviarResena(GestorResenas gestorResenas, int puntaje, String comentario, int idAlojamiento) {
+        Date fecha = new Date();
+        Resena nueva = new Resena(puntaje, comentario, fecha, this.getId(), idAlojamiento);
+        gestorResenas.agregar(nueva);
+        System.out.println("Reseña enviada correctamente.");
     }
 }

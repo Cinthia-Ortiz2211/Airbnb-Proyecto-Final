@@ -3,6 +3,8 @@ package Modelos.Usuarios;
 import java.time.LocalDateTime;
 import java.util.List;
 import Enum.TipoCliente;
+import Excepciones.UsuarioNoEncontradoException;
+
 
 public abstract class Usuario {
 /// ATRIBUTOS
@@ -109,8 +111,17 @@ public abstract class Usuario {
         System.out.println("Usuario registrado correctamente");
     }
 
-    public boolean ingresar (String nombreUsuario, String contrasena){
-        return this.nombre.equals(nombreUsuario) && this.contrasena.equals(contrasena);
+    public boolean ingresar(String nombreUsuario, String contrasena) {
+        if (this.nombre == null || this.contrasena == null) {
+            throw new UsuarioNoEncontradoException("El usuario no existe o no está registrado ");
+        }
+
+        if (!this.nombre.equals(nombreUsuario) || !this.contrasena.equals(contrasena)) {
+            throw new UsuarioNoEncontradoException("Nombre de usuario o contraseña incorrectos ");
+        }
+
+        System.out.println("Inicio de sesión exitoso para: " + nombreUsuario);
+        return true;
     }
 
     public void cerrarSesion(int idUsuario) {

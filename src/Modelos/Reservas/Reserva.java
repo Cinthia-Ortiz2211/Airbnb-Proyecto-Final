@@ -1,21 +1,36 @@
 package Modelos.Reservas;
 
+import Interfaces.Reservable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Reserva {
+import Excepciones.ReservaInvalidaException;
+
+
+public class Reserva implements Reservable {
     private static int contador = 0;
     private int idReserva;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private float costoTotal;
-    private String estado; // o hacemos con string: pendiente, confirmada, cancelada ; o conm enum, o directamente, pendiende o cancelada
+    private String estado; // Pendiente, Confirmada, Cancelada
     private ArrayList<String> diasReservados;
     private int idViajero;
     private int idAlojamiento;
     private int idPago;
 
-    public Reserva(LocalDateTime fechaInicio, LocalDateTime fechaFin, float costoTotal, ArrayList<String> diasReservados, int idViajero, int idAlojamiento) {
+    public Reserva(LocalDateTime fechaInicio, LocalDateTime fechaFin, float costoTotal,
+                   ArrayList<String> diasReservados, int idViajero, int idAlojamiento) {
+        if (fechaFin.isBefore(fechaInicio)) {
+            throw new ReservaInvalidaException("La fecha de fin no puede ser anterior a la de inicio");
+        }
+        if (costoTotal <= 0) {
+            throw new ReservaInvalidaException("El costo total de la reserva debe ser mayor a cero ");
+        }
+        if (diasReservados == null || diasReservados.isEmpty()) {
+            throw new ReservaInvalidaException("Debe incluir al menos un dia reservado ");
+        }
+
         this.idReserva = ++contador;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -23,52 +38,41 @@ public class Reserva {
         this.costoTotal = costoTotal;
         this.idViajero = idViajero;
         this.idAlojamiento = idAlojamiento;
-        this.estado = "pendiente";
+        this.estado = "Pendiente";
     }
 
-    public int getIdReserva() {
-        return idReserva;
-    }
 
-    public LocalDateTime getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public LocalDateTime getFechaFin() {
-        return fechaFin;
-    }
-
-    public float getCostoTotal() {
-        return costoTotal;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public int getIdViajero() {
-        return idViajero;
-    }
-
-    public int getIdAlojamiento() {
-        return idAlojamiento;
-    }
-
+    // immplementación de la interfaz Reservable
+    @Override
     public void crearReserva() {
         System.out.println("Reserva creada con ID: " + idReserva);
     }
 
-    public void cancelarReserva() {
-        this.estado = "Cancelada";
-        System.out.println("Reserva " + idReserva + " cancelada.");
-    }
-
+    @Override
     public void confirmarReserva() {
         this.estado = "Confirmada";
         System.out.println("Reserva " + idReserva + " confirmada.");
     }
 
+    @Override
+    public void cancelarReserva() {
+        this.estado = "Cancelada";
+        System.out.println("Reserva " + idReserva + " cancelada.");
+    }
 
+    public void asociarPago(int idPago) {
+        this.idPago = idPago;
+        System.out.println("Pago asociado a la reserva " + idReserva);
+    }
+
+    // Getters y toString
+    public int getIdReserva() {
+        return idReserva;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
 
     @Override
     public String toString() {
@@ -80,6 +84,7 @@ public class Reserva {
                 ", estado='" + estado + '\'' +
                 ", idViajero=" + idViajero +
                 ", idAlojamiento=" + idAlojamiento +
+                ", idPago=" + idPago +
                 '}';
     }
 }

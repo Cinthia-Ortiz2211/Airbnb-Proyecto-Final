@@ -1,5 +1,6 @@
 package Modelos.Resenas;
 
+import Modelos.Gestores.GestorResenas;
 import java.util.Date;
 
 public class Resena {
@@ -20,13 +21,36 @@ public class Resena {
         this.id_alojamiento = id_alojamiento;
     }
 
-    public void SubirResena(int id_r)
-    {
-
+    public int getIdResena() {
+        return id_resena;
     }
 
-    public void EliminarResena(int id_r)
-    {
+    public int getIdAlojamiento() {
+        return id_alojamiento;
+    }
 
+    public void SubirResena(GestorResenas gestor) {
+        gestor.agregar(this);
+        System.out.println("Reseña subida con ID: " + id_resena);
+    }
+
+    public void EliminarResena(GestorResenas gestor) {
+        if (gestor.eliminar(this)) {
+            System.out.println("Reseña eliminada (ID: " + id_resena + ")");
+        } else {
+            System.out.println("No se pudo eliminar la reseña ");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Resena{" +
+                "id_resena=" + id_resena +
+                ", puntaje=" + puntaje +
+                ", comentario='" + comentario + '\'' +
+                ", fecha=" + fecha +
+                ", id_autor=" + id_autor +
+                ", id_alojamiento=" + id_alojamiento +
+                '}';
     }
 }
