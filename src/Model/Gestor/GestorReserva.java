@@ -1,9 +1,9 @@
-package Modelos.Gestores;
+package Model.Gestor;
 
-import Modelos.Reservas.Reserva;
+import Model.Reserva.Reserva;
 import java.util.List;
 
-public class GestorReservas extends Gestor<Reserva> {
+public class GestorReserva extends Gestor<Reserva> {
 
     public Reserva buscarPorId(int idReserva) {
         List<Reserva> reservas = listar();

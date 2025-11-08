@@ -1,9 +1,9 @@
-package Modelos.Gestores;
+package Model.Gestor;
 
-import Modelos.Resenas.Resena;
+import Model.Resena.Resena;
 import java.util.List;
 
-public class GestorResenas extends Gestor<Resena> {
+public class GestorResena extends Gestor<Resena> {
 
     //falta mostrar reseñans por alojamientos
 

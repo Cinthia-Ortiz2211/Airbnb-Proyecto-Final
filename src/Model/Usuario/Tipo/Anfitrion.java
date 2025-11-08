@@ -1,6 +1,6 @@
-package Modelos.Usuarios.Tipos;
+package Model.Usuario.Tipo;
 
-import Modelos.Usuarios.Usuario;
+import Model.Usuario.Usuario;
 
 import java.time.LocalDateTime;
 import Enum.TipoCliente;

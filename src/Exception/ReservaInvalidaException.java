@@ -1,4 +1,4 @@
-package Excepciones;
+package Exception;
 
 public class ReservaInvalidaException extends RuntimeException {
     public ReservaInvalidaException(String message) {

@@ -1,10 +1,10 @@
-package Modelos.Gestores;
+package Model.Gestor;
 
-import Modelos.Usuarios.Usuario;
-import Excepciones.UsuarioNoEncontradoException;
+import Model.Usuario.Usuario;
+import Exception.UsuarioNoEncontradoException;
 import java.util.List;
 
-public class GestorUsuarios extends Gestor<Usuario> {
+public class GestorUsuario extends Gestor<Usuario> {
 
     public Usuario buscarPorId(int id) {
         List<Usuario> usuarios = listar();

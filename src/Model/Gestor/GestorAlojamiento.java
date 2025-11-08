@@ -1,9 +1,9 @@
-package Modelos.Gestores;
+package Model.Gestor;
 
-import Modelos.Alojamientos.Alojamiento;
+import Model.Alojamiento.Alojamiento;
 import java.util.List;
 
-public class GestorAlojamientos extends Gestor<Alojamiento> {
+public class GestorAlojamiento extends Gestor<Alojamiento> {
 
     public Alojamiento buscarPorId(int id) {
         List<Alojamiento> alojamientos = listar();

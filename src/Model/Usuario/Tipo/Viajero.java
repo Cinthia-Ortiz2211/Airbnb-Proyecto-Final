@@ -1,11 +1,11 @@
-package Modelos.Usuarios.Tipos;
+package Model.Usuario.Tipo;
 
-import Modelos.Alojamientos.Alojamiento;
-import Modelos.Gestores.GestorAlojamientos;
-import Modelos.Gestores.GestorResenas;
-import Modelos.Gestores.GestorReservas;
-import Modelos.Resenas.Resena;
-import Modelos.Usuarios.Usuario;
+import Model.Alojamiento.Alojamiento;
+import Model.Gestor.GestorAlojamiento;
+import Model.Gestor.GestorResena;
+import Model.Gestor.GestorReserva;
+import Model.Resena.Resena;
+import Model.Usuario.Usuario;
 import Enum.TipoCliente;
 
 import java.time.LocalDateTime;
@@ -21,7 +21,7 @@ public class Viajero extends Usuario {
     ///  METODOS
 
     // Buscar alojamiento por tipo (ej: casa, depto)
-    public void buscarAlojamiento(GestorAlojamientos gestorAlojamientos, String tipoBuscado) {
+    public void buscarAlojamiento(GestorAlojamiento gestorAlojamientos, String tipoBuscado) {
         List<Alojamiento> lista = gestorAlojamientos.listar();
         boolean encontrado = false;
         for (Alojamiento a : lista) {
@@ -36,7 +36,7 @@ public class Viajero extends Usuario {
     }
 
     // Filtrar alojamientos por precio
-    public void filtrarAlojamientos(GestorAlojamientos gestorAlojamientos, float precioMax) {
+    public void filtrarAlojamientos(GestorAlojamiento gestorAlojamientos, float precioMax) {
         List<Alojamiento> lista = gestorAlojamientos.listar();
         boolean encontrado = false;
         for (Alojamiento a : lista) {
@@ -51,13 +51,13 @@ public class Viajero extends Usuario {
     }
 
     // Mostrar historial de reservas del viajero
-    public void verHistorialDeReservas(GestorReservas gestorReservas, int idViajero) {
+    public void verHistorialDeReservas(GestorReserva gestorReservas, int idViajero) {
         System.out.println("=== Historial de reservas del viajero ID: " + idViajero + " ===");
         gestorReservas.listarReservasPorViajero(idViajero);
     }
 
     // MAdnar una reseña
-    public void enviarResena(GestorResenas gestorResenas, int puntaje, String comentario, int idAlojamiento) {
+    public void enviarResena(GestorResena gestorResenas, int puntaje, String comentario, int idAlojamiento) {
         Date fecha = new Date();
         Resena nueva = new Resena(puntaje, comentario, fecha, this.getId(), idAlojamiento);
         gestorResenas.agregar(nueva);
