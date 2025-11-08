@@ -1,8 +1,7 @@
-package Modelos.Gestores;
+package Model.Gestor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Gestor<T> {
     private List<T> items;

@@ -1,9 +1,9 @@
-package Modelos.Gestores;
+package Model.Gestor;
 
-import Modelos.Pagos.Pago;
+import Model.Pago.Pago;
 import java.util.List;
 
-public class GestorPagos extends Gestor<Pago> {
+public class GestorPago extends Gestor<Pago> {
 
     public Pago buscarPorId(int idPago) {
         List<Pago> pagos = listar();

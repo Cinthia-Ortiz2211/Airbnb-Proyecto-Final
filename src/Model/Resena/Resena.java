@@ -1,6 +1,6 @@
-package Modelos.Resenas;
+package Model.Resena;
 
-import Modelos.Gestores.GestorResenas;
+import Model.Gestor.GestorResena;
 import java.util.Date;
 
 public class Resena {
@@ -29,12 +29,12 @@ public class Resena {
         return id_alojamiento;
     }
 
-    public void SubirResena(GestorResenas gestor) {
+    public void SubirResena(GestorResena gestor) {
         gestor.agregar(this);
         System.out.println("Reseña subida con ID: " + id_resena);
     }
 
-    public void EliminarResena(GestorResenas gestor) {
+    public void EliminarResena(GestorResena gestor) {
         if (gestor.eliminar(this)) {
             System.out.println("Reseña eliminada (ID: " + id_resena + ")");
         } else {

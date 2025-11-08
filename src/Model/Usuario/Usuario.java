@@ -1,9 +1,9 @@
-package Modelos.Usuarios;
+package Model.Usuario;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 import Enum.TipoCliente;
-import Excepciones.UsuarioNoEncontradoException;
+import Exception.UsuarioNoEncontradoException;
 
 
 public abstract class Usuario {

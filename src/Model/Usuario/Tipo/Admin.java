@@ -1,9 +1,9 @@
-package Modelos.Usuarios.Tipos;
+package Model.Usuario.Tipo;
 
-import Modelos.Gestores.GestorAlojamientos;
-import Modelos.Gestores.GestorPagos;
-import Modelos.Gestores.GestorUsuarios;
-import Modelos.Usuarios.Usuario;
+import Model.Gestor.GestorAlojamiento;
+import Model.Gestor.GestorPago;
+import Model.Gestor.GestorUsuario;
+import Model.Usuario.Usuario;
 
 import java.time.LocalDateTime;
 import Enum.TipoCliente;
@@ -21,19 +21,19 @@ public class Admin extends Usuario {
     }
 
     // Listar todos los usuarios registrados
-    public void listarUsuarios(GestorUsuarios gestorUsuarios) {
+    public void listarUsuarios(GestorUsuario gestorUsuarios) {
         System.out.println("=== Lista de usuarios ===");
         gestorUsuarios.mostrarUsuarios();
     }
 
     // Listar todos los alojamientos del sistema
-    public void listarAlojamientos(GestorAlojamientos gestorAlojamientos) {
+    public void listarAlojamientos(GestorAlojamiento gestorAlojamientos) {
         System.out.println("=== Lista de alojamientos ===");
         gestorAlojamientos.mostrarAlojamientosDisponibles();
     }
 
     // Listar todos los pagos del sistema
-    public void listarPagos(GestorPagos gestorPagos) {
+    public void listarPagos(GestorPago gestorPagos) {
         System.out.println("=== Lista de pagos ===");
         gestorPagos.mostrarPagos();
 
