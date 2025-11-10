@@ -1,4 +1,4 @@
-package Model.Pago;
+package model.Pago;
 
 import java.time.LocalDateTime;
 

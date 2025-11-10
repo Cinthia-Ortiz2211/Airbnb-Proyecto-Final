@@ -1,4 +1,4 @@
-package Interface;
+package contract;
 
 public interface Reservable {
     void crearReserva();

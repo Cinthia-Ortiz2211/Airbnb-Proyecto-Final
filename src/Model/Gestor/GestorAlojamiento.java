@@ -1,6 +1,6 @@
-package Model.Gestor;
+package model.Gestor;
 
-import Model.Alojamiento.Alojamiento;
+import model.Alojamiento.Alojamiento;
 import java.util.List;
 
 public class GestorAlojamiento extends Gestor<Alojamiento> {

@@ -1,144 +1,72 @@
-package Model.Usuario;
+package model.usuario;
 
 import java.time.LocalDateTime;
+import exception.UsuarioNoEncontradoException;
+import contract.Autenticable;
 
-import Enum.TipoCliente;
-import Exception.UsuarioNoEncontradoException;
+/**
+ * Clase abstracta base para todos los tipos de usuario del sistema.
+ */
+public abstract class Usuario implements Autenticable {
 
+    private static int contador = 0;
 
-public abstract class Usuario {
-/// ATRIBUTOS
-    private int id;
-    private static int count = 0;
-    private String nombre;
-    private String mail;
-    private String contrasena;
-    private String numeroTelefonico;
-    private LocalDateTime fechaDeRegistro;
-    private float valoracion;
-    private TipoCliente tipoCliente;
+    protected int id;
+    protected String nombre;
+    protected String email;
+    protected String contrasena;
+    protected String numeroTelefonico;
+    protected LocalDateTime fechaDeRegistro;
+    protected TipoUsuario tipoUsuario;
+    protected boolean sesionActiva = false;
 
-    /// CONSTRUCTORES.
-
-    public Usuario(float valoracion, LocalDateTime fechaDeRegistro, String numeroTelefonico, String mail, String nombre, String contrasena, TipoCliente tipoCliente) {
-        this.id = ++count;
-        this.valoracion = valoracion;
-        this.fechaDeRegistro = fechaDeRegistro;
-        this.numeroTelefonico = numeroTelefonico;
-        this.mail = mail;
+    public Usuario(String nombre, String email, String contrasena, TipoUsuario tipoUsuario) {
+        this.id = ++contador;
         this.nombre = nombre;
+        this.email = email;
         this.contrasena = contrasena;
-        this.tipoCliente = tipoCliente;
+        this.tipoUsuario = tipoUsuario;
+        this.fechaDeRegistro = LocalDateTime.now();
     }
 
-    ///  GETTERS AND SETTERS
+    // Getters
+    public int getId() { return id; }
+    public String getNombre() { return nombre; }
+    public String getEmail() { return email; }
+    public TipoUsuario getTipoUsuario() { return tipoUsuario; }
+    public boolean isSesionActiva() { return sesionActiva; }
 
-    public String getNombre() {
-        return nombre;
+    // Implementación de la interfaz Autenticable
+    @Override
+    public boolean iniciarSesion(String email, String contrasena) {
+        if (this.email.equals(email) && this.contrasena.equals(contrasena)) {
+            this.sesionActiva = true;
+            System.out.println(nombre + " inició sesión correctamente.");
+            return true;
+        }
+        throw new UsuarioNoEncontradoException("Email o contraseña incorrectos.");
     }
 
-    public void setNombre(String nombre) {
+    @Override
+    public void cerrarSesion() {
+        if (this.sesionActiva) {
+            this.sesionActiva = false;
+            System.out.println(nombre + " cerró sesión correctamente.");
+        } else {
+            System.out.println("El usuario " + nombre + " no tiene una sesión activa.");
+        }
+    }
+
+    public void actualizarPerfil(String nombre, String email, String contrasena, String telefono) {
         this.nombre = nombre;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
+        this.email = email;
         this.contrasena = contrasena;
+        this.numeroTelefonico = telefono;
+        System.out.println("Perfil actualizado correctamente para: " + this.nombre);
     }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public String getNumeroTelefonico() {
-        return numeroTelefonico;
-    }
-
-    public void setNumeroTelefonico(String numeroTelefonico) {
-        this.numeroTelefonico = numeroTelefonico;
-    }
-
-   public LocalDateTime getFechaDeRegistro() {
-        return fechaDeRegistro;
-    }
-
-    public void setFechaDeRegistro(LocalDateTime fechaDeRegistro) {
-        this.fechaDeRegistro = fechaDeRegistro;
-    }
-
-    public float getValoracion() {
-        return valoracion;
-    }
-
-    public void setValoracion(float valoracion) {
-        this.valoracion = valoracion;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    /// ToString
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", mail='" + mail + '\'' +
-                ", contrasena='" + contrasena + '\'' +
-                ", numeroTelefonico='" + numeroTelefonico + '\'' +
-                ", tipoDeUsuario='" + tipoCliente + '\'' +
-                ", fechaDeRegistro=" + fechaDeRegistro +
-                ", valoracion=" + valoracion +
-                '}';
+        return String.format("[%d] %s (%s) - %s", id, nombre, tipoUsuario, email);
     }
-
-    ///  METODOS
-
-    public void registrar(String nombreUsuario, String contrasena, String mail){
-        this.nombre = nombreUsuario;
-        this.contrasena = contrasena;
-        this.mail = mail;
-        this.fechaDeRegistro = LocalDateTime.now();
-        System.out.println("Usuario registrado correctamente");
-    }
-
-    public boolean ingresar(String nombreUsuario, String contrasena) {
-        if (this.nombre == null || this.contrasena == null) {
-            throw new UsuarioNoEncontradoException("El usuario no existe o no está registrado ");
-        }
-
-        if (!this.nombre.equals(nombreUsuario) || !this.contrasena.equals(contrasena)) {
-            throw new UsuarioNoEncontradoException("Nombre de usuario o contraseña incorrectos ");
-        }
-
-        System.out.println("Inicio de sesión exitoso para: " + nombreUsuario);
-        return true;
-    }
-
-    public void cerrarSesion(int idUsuario) {
-        if (this.id == idUsuario) {
-            System.out.println("Secion cerrada para el usuario con ID: " + idUsuario);
-        }
-    }
-
-    public void actualizarPerfil (int idUsuario, String nombre, String mail, String contrasena, String numeroTelefonico){
-        if (this.id == idUsuario){
-            this.nombre = nombre;
-            this.mail = mail;
-            this.contrasena = contrasena;
-            this.numeroTelefonico = numeroTelefonico;
-            System.out.println("Perfil actualizado con exito!");
-        }
-    }
-
-
 }
