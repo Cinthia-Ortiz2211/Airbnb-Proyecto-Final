@@ -1,10 +1,10 @@
-package Model.Reserva;
+package model.Reserva;
 
-import Interface.Reservable;
+import contract.Reservable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import Exception.ReservaInvalidaException;
+import exception.ReservaInvalidaException;
 
 
 public class Reserva implements Reservable {

@@ -1,4 +1,4 @@
-package Model.Gestor;
+package model.Gestor;
 
 import java.util.ArrayList;
 import java.util.List;

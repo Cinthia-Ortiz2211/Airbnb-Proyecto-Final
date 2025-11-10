@@ -1,6 +1,6 @@
-package Model.Gestor;
+package model.Gestor;
 
-import Model.Reserva.Reserva;
+import model.Reserva.Reserva;
 import java.util.List;
 
 public class GestorReserva extends Gestor<Reserva> {

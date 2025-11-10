@@ -1,6 +1,6 @@
-package Model.Gestor;
+package model.Gestor;
 
-import Model.Pago.Pago;
+import model.Pago.Pago;
 import java.util.List;
 
 public class GestorPago extends Gestor<Pago> {

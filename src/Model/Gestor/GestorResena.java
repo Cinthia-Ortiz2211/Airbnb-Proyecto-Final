@@ -1,6 +1,6 @@
-package Model.Gestor;
+package model.Gestor;
 
-import Model.Resena.Resena;
+import model.Resena.Resena;
 import java.util.List;
 
 public class GestorResena extends Gestor<Resena> {
