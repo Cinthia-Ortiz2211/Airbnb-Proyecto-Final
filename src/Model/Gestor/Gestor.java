@@ -1,33 +1,51 @@
-package model.Gestor;
+package model.gestor;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import contract.IGestor;
+import model.usuario.Usuario;
 
-public class Gestor<T> {
-    private List<T> items;
+public class Gestor<E extends Usuario> implements IGestor<E> {
 
-    public Gestor()
-    {
-        items = new ArrayList<>();
+    protected List<E> elementos;
+
+    public Gestor() {
+        this.elementos = new ArrayList<>();
     }
 
-    public void agregar(T t)
-    {
-        items.add(t);
+    @Override
+    public void agregar(E elemento) {
+        elementos.add(elemento);
     }
 
-    public boolean eliminar(T t)
-    {
-        return items.remove(t);
+    @Override
+    public List<E> listar() {
+        return new ArrayList<>(elementos);
     }
 
-    public List<T> listar()
-    {
-        return new ArrayList<>(items);
+    @Override
+    public E buscarPorId(int id) {
+        for (E elemento : elementos) {
+            if (elemento.getId() == id) {
+                return elemento;
+            }
+        }
+        return null;
     }
 
-    public int cantidad()
-    {
-        return items.size();
+    @Override
+    public boolean eliminar(int id) {
+        boolean eliminado = false;
+        Iterator<E> it = elementos.iterator();
+
+        while (it.hasNext()) {
+            E e = it.next();
+            if (e.getId() == id) {
+                it.remove();
+                eliminado = true;
+            }
+        }
+        return eliminado;
     }
 }
