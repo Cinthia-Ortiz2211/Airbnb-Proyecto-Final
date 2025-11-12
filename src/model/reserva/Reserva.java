@@ -43,6 +43,29 @@ public class Reserva implements Identificable {
         this.costoTotal = calcularCosto();
     }
 
+    public Reserva(Alojamiento alojamiento, Viajero viajero,
+                   LocalDate fechaInicio, LocalDate fechaFin, double costoTotal) {
+        this.id = ++contador;
+        this.alojamiento = alojamiento;
+        this.viajero = viajero;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.costoTotal = costoTotal;
+        this.pendiente = true;
+    }
+
+    public Reserva(int id, Alojamiento alojamiento, Viajero viajero,
+                   LocalDate fechaInicio, LocalDate fechaFin, double costoTotal) {
+        this.id = id;
+        if (id > contador) contador = id;
+        this.alojamiento = alojamiento;
+        this.viajero = viajero;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.costoTotal = costoTotal;
+        this.pendiente = true;
+    }
+
 
     public int getId() { return id; }
     public Alojamiento getAlojamiento() { return alojamiento; }
