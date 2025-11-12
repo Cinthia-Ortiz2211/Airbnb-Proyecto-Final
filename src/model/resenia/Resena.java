@@ -1,6 +1,6 @@
-package model.Resena;
+package model.resenia;
 
-import model.Gestor.GestorResena;
+import model.gestor.GestorResena;
 import java.util.Date;
 
 public class Resena {
