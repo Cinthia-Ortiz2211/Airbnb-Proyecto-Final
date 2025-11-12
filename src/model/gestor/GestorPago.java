@@ -2,7 +2,7 @@ package model.gestor;
 
 import contract.Persistible;
 import model.pago.Pago;
-import model.enums.EstadoPago;
+import model.pago.EstadoPago;
 import model.reserva.Reserva;
 import util.JsonUtil;
 
