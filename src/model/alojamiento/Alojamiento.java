@@ -29,7 +29,7 @@ public class Alojamiento implements Identificable {
     public Alojamiento(
             int id,
             String direccion,
-            String tipoStr,
+            TipoAlojamiento tipo,
             String nivel,
             String descripcion,
             double precioPorNoche,
@@ -40,11 +40,7 @@ public class Alojamiento implements Identificable {
         if (id > contador) contador = id; // sincroniza el contador al leer desde JSON
 
         this.direccion = direccion;
-        try {
-            this.tipo = TipoAlojamiento.valueOf(tipoStr.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            this.tipo = TipoAlojamiento.CASA;
-        }
+        this.tipo = (tipo != null) ? tipo : TipoAlojamiento.CASA;
         this.nivel = nivel;
         this.descripcion = descripcion;
         this.precioPorNoche = precioPorNoche;

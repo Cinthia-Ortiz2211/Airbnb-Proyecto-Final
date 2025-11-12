@@ -2,7 +2,7 @@ package model.gestor;
 
 import contract.Persistible;
 import model.usuario.*;
-import model.alojamiento.Alojamiento;
+import model.alojamiento.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,7 +110,24 @@ public class GestorAlojamiento extends Gestor<Alojamiento> implements Persistibl
                 String emailAnfitrion = obj.optString("anfitrion");
                 Anfitrion anfitrion = buscarAnfitrion(emailAnfitrion);
 
-                Alojamiento alojamiento = new Alojamiento(id, direccion, tipoStr, nivel, descripcion, precio, fechasDisponibles, anfitrion);
+                TipoAlojamiento tipo;
+                try {
+                    tipo = TipoAlojamiento.valueOf(tipoStr.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    tipo = TipoAlojamiento.CASA;
+                }
+
+                Alojamiento alojamiento = new Alojamiento(
+                        id,
+                        direccion,
+                        tipo,
+                        nivel,
+                        descripcion,
+                        precio,
+                        fechasDisponibles,
+                        anfitrion
+                );
+
                 agregar(alojamiento);
 
                 if (id > maxId) maxId = id;
