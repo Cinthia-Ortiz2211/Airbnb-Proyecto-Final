@@ -27,7 +27,6 @@ public class Reserva implements Identificable {
         this.viajero = viajero;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.pendiente = pendiente;
         this.costoTotal = calcularCosto();
     }
 
@@ -41,6 +40,29 @@ public class Reserva implements Identificable {
         this.fechaFin = fechaFin;
         this.pendiente = pendiente;
         this.costoTotal = calcularCosto();
+    }
+
+    public Reserva(Alojamiento alojamiento, Viajero viajero,
+                   LocalDate fechaInicio, LocalDate fechaFin, double costoTotal) {
+        this.id = ++contador;
+        this.alojamiento = alojamiento;
+        this.viajero = viajero;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.costoTotal = costoTotal;
+        this.pendiente = true;
+    }
+
+    public Reserva(int id, Alojamiento alojamiento, Viajero viajero,
+                   LocalDate fechaInicio, LocalDate fechaFin, double costoTotal) {
+        this.id = id;
+        if (id > contador) contador = id;
+        this.alojamiento = alojamiento;
+        this.viajero = viajero;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.costoTotal = costoTotal;
+        this.pendiente = true;
     }
 
 
