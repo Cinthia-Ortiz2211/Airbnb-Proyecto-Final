@@ -1,65 +1,122 @@
 package model.alojamiento;
 
 import contract.Identificable;
+import model.usuario.Anfitrion;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Alojamiento implements Identificable {
+
     private static int contador = 0;
+
     private int id;
     private String direccion;
-    private String tipo; // Puede ser:  casa, departamento, habitación
+    private TipoAlojamiento tipo;
+    private String nivel;
     private String descripcion;
-    private float precioPorNoche;
-    private List<String> diasDisponibles;
-    private int idAnfitrion;
+    private double precioPorNoche;
+    private List<LocalDate> fechasDisponibles;
+    private Anfitrion anfitrion;
 
-    public Alojamiento(String direccion, String tipo, String descripcion, float precioPorNoche, List<String> diasDisponibles, int idAnfitrion) {
+
+    public Alojamiento() {
+        this.id = ++contador;
+        this.fechasDisponibles = new ArrayList<>();
+    }
+
+    public Alojamiento(
+            int id,
+            String direccion,
+            String tipoStr,
+            String nivel,
+            String descripcion,
+            double precioPorNoche,
+            List<LocalDate> fechasDisponibles,
+            Anfitrion anfitrion
+    ) {
+        this.id = id;
+        if (id > contador) contador = id; // sincroniza el contador al leer desde JSON
+
+        this.direccion = direccion;
+        try {
+            this.tipo = TipoAlojamiento.valueOf(tipoStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            this.tipo = TipoAlojamiento.CASA;
+        }
+        this.nivel = nivel;
+        this.descripcion = descripcion;
+        this.precioPorNoche = precioPorNoche;
+        this.fechasDisponibles = (fechasDisponibles != null) ? fechasDisponibles : new ArrayList<>();
+        this.anfitrion = anfitrion;
+    }
+
+    public Alojamiento(
+            String direccion,
+            TipoAlojamiento tipo,
+            String nivel,
+            String descripcion,
+            double precioPorNoche,
+            List<LocalDate> fechasDisponibles,
+            Anfitrion anfitrion
+    ) {
         this.id = ++contador;
         this.direccion = direccion;
         this.tipo = tipo;
+        this.nivel = nivel;
         this.descripcion = descripcion;
         this.precioPorNoche = precioPorNoche;
-        this.diasDisponibles = new ArrayList<>(diasDisponibles);
-        this.idAnfitrion = idAnfitrion;
+        this.fechasDisponibles = (fechasDisponibles != null) ? fechasDisponibles : new ArrayList<>();
+        this.anfitrion = anfitrion;
     }
 
 
-    public int getIdAlojamiento() {
-        return id;
+    public int getId() { return id; }
+    public void setId(int id) {
+        this.id = id;
+        if (id > contador) contador = id;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
+
+    public TipoAlojamiento getTipo() { return tipo; }
+    public void setTipo(TipoAlojamiento tipo) { this.tipo = tipo; }
+
+    public String getNivel() { return nivel; }
+    public void setNivel(String nivel) { this.nivel = nivel; }
+
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    public double getPrecioPorNoche() { return precioPorNoche; }
+    public void setPrecioPorNoche(double precioPorNoche) { this.precioPorNoche = precioPorNoche; }
+
+    public List<LocalDate> getFechasDisponibles() { return fechasDisponibles; }
+    public void setFechasDisponibles(List<LocalDate> fechasDisponibles) { this.fechasDisponibles = fechasDisponibles; }
+
+    public Anfitrion getAnfitrion() { return anfitrion; }
+    public void setAnfitrion(Anfitrion anfitrion) { this.anfitrion = anfitrion; }
+
+
+    public boolean esDisponible(LocalDate inicio, LocalDate fin) {
+        if (fechasDisponibles == null || fechasDisponibles.isEmpty()) return false;
+        for (int i = 0; i < fechasDisponibles.size(); i++) {
+            LocalDate fecha = fechasDisponibles.get(i);
+            if (!fecha.isBefore(inicio) && !fecha.isAfter(fin)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public String getTipo() {
-        return tipo;
+    public static void actualizarContador(int ultimoId) {
+        if (ultimoId > contador) contador = ultimoId;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public float getPrecioPorNoche() {
-        return precioPorNoche;
-    }
-
-    public List<String> getDiasDisponibles() {
-        return diasDisponibles;
-    }
-
-    public int getIdAnfitrion() {
-        return idAnfitrion;
-    }
-
-    public void agregarDiaDisponible(String dia) {
-        diasDisponibles.add(dia);
-    }
-
-    public void eliminarDiaDisponible(String dia) {
-        diasDisponibles.remove(dia);
+    public static int getSiguienteId() {
+        return ++contador;
     }
 
     @Override
@@ -67,15 +124,11 @@ public class Alojamiento implements Identificable {
         return "Alojamiento{" +
                 "id=" + id +
                 ", direccion='" + direccion + '\'' +
-                ", tipo='" + tipo + '\'' +
+                ", tipo=" + tipo +
+                ", nivel='" + nivel + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", precioPorNoche=" + precioPorNoche +
-                ", diasDisponibles=" + diasDisponibles +
-                ", idAnfitrion=" + idAnfitrion +
+                ", anfitrion=" + (anfitrion != null ? anfitrion.getEmail() : "sin anfitrión") +
                 '}';
-    }
-
-    public int getId() {
-        return id;
     }
 }
