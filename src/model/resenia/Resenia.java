@@ -1,11 +1,12 @@
 package model.resenia;
 
+import contract.Identificable;
 import model.usuario.*;
 import model.alojamiento.Alojamiento;
 
 import java.time.LocalDateTime;
 
-public class Resenia {
+public class Resenia implements Identificable {
 
     private static int contador = 0;
 

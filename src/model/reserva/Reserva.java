@@ -2,10 +2,12 @@ package model.reserva;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+
+import contract.Identificable;
 import model.alojamiento.Alojamiento;
 import model.usuario.Viajero;
 
-public class Reserva {
+public class Reserva implements Identificable {
 
     private static int contador = 0;
 
