@@ -71,22 +71,17 @@ public class GestorCodigoDescuento extends Gestor<CodigoDescuento> implements Pe
     @Override
     public void guardarEnArchivo() {
         JSONArray array = new JSONArray();
-
         try {
-            for (int i = 0; i < elementos.size(); i++) {
-                CodigoDescuento c = elementos.get(i);
+            for (CodigoDescuento c : elementos) {
                 JSONObject json = new JSONObject();
-
+                json.put("id", c.getId());
                 json.put("codigo", c.getCodigo());
                 json.put("tipo", c.getTipo().toString());
                 json.put("monto", c.getMonto());
                 json.put("fechaExpiracion", c.getFechaExpiracion().toString());
-
                 array.put(json);
             }
-
             JsonUtil.grabar(array, ARCHIVO);
-
         } catch (JSONException e) {
             System.err.println("Error al guardar códigos: " + e.getMessage());
         }
@@ -97,21 +92,25 @@ public class GestorCodigoDescuento extends Gestor<CodigoDescuento> implements Pe
         JSONArray array = JsonUtil.leer(ARCHIVO);
         if (array == null) return;
 
+        int maxId = 0;
+
         try {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
 
-                String codigo = obj.optString("codigo");
-                String tipoStr = obj.optString("tipo", "FIJO");
-                double monto = obj.optDouble("monto", 0.0);
-                String fechaStr = obj.optString("fechaExpiracion", LocalDateTime.now().plusDays(30).toString());
+                int id = obj.getInt("id");
+                String codigo = obj.getString("codigo");
+                TipoCodigoDescuento tipo = TipoCodigoDescuento.valueOf(obj.getString("tipo"));
+                double monto = obj.getDouble("monto");
+                LocalDateTime fechaExpiracion = LocalDateTime.parse(obj.getString("fechaExpiracion"));
 
-                TipoCodigoDescuento tipo = TipoCodigoDescuento.valueOf(tipoStr.toUpperCase());
-                LocalDateTime fechaExpiracion = LocalDateTime.parse(fechaStr);
-
-                CodigoDescuento c = new CodigoDescuento(codigo, tipo, monto, fechaExpiracion);
+                CodigoDescuento c = new CodigoDescuento(id, codigo, tipo, monto, fechaExpiracion);
                 agregar(c);
+                if (id > maxId) maxId = id;
             }
+
+            CodigoDescuento.actualizarContador(maxId);
+
         } catch (JSONException e) {
             System.err.println("Error al cargar códigos: " + e.getMessage());
         }

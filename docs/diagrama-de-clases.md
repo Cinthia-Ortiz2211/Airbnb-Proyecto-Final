@@ -25,6 +25,11 @@ classDiagram
         +cerrarSesion(): void
     }
 
+    class Identificable {
+        <<interface>>
+        +getId(): Number
+    }
+
 %% ========= ENUMS =========
     class TipoUsuario {
         <<enumeration>>
@@ -70,6 +75,9 @@ classDiagram
         +actualizarPerfil(nombre: Text, email: Text, contrasena: Text, telefono: Text): void
     }
 
+    Identificable <|.. Usuario
+    Autenticable <|.. Usuario
+
 %% ========= SUBCLASES DE USUARIO =========
     class Administrador {
         +Administrador(nombre: Text, email: Text, contrasena: Text)
@@ -83,7 +91,6 @@ classDiagram
         +Viajero(nombre: Text, email: Text, contrasena: Text)
     }
 
-    Autenticable <|.. Usuario
     Usuario <|-- Administrador
     Usuario <|-- Anfitrion
     Usuario <|-- Viajero
@@ -111,7 +118,6 @@ classDiagram
         - Boolean pendiente
         +calcularCosto(): Decimal
         +verDetalle(): Text
-        +cambiarDestino(nuevo: Alojamiento): void
         +cancelar(): void
     }
 
@@ -124,8 +130,9 @@ classDiagram
     }
 
     class CodigoDescuento {
+        - Number id
         - Text codigo
-        - TipoCodigoDescuento tipoCodigoDescuento
+        - TipoCodigoDescuento tipo
         - Decimal monto
         - DateTime fechaExpiracion
         +esValido(fechaActual: DateTime): Boolean
@@ -137,10 +144,17 @@ classDiagram
         - Text comentario
         - Viajero autor
         - DateTime fecha
-        - Alojamiento alojamiento  %% opcional: reseña de alojamiento
-        - Anfitrion anfitrion      %% opcional: reseña de anfitrión
+        - Alojamiento alojamiento
+        - Anfitrion anfitrion
     }
 
+    Identificable <|.. Alojamiento
+    Identificable <|.. Reserva
+    Identificable <|.. Pago
+    Identificable <|.. CodigoDescuento
+    Identificable <|.. Resenia
+
+%% ========= RELACIONES ENTRE ENTIDADES =========
     Anfitrion "1" --> "many" Alojamiento : publica
     Alojamiento "1" --> "many" Resenia : tiene
     Viajero "1" --> "many" Reserva : realiza
@@ -150,7 +164,7 @@ classDiagram
     Reserva "1" --> "1" Pago
 
 %% ========= CLASE GENÉRICA BASE =========
-    class Gestor~E~ {
+    class Gestor~E extends Identificable~ {
         <<generic>>
         - List~E~ elementos
         +agregar(elemento: E): void
@@ -159,56 +173,16 @@ classDiagram
         +eliminar(id: Number): Boolean
     }
 
-%% ========= GESTORES ESPECIALIZADOS =========
-    class GestorUsuario {
-        - List~Usuario~ usuarios
-        +registrar(nombre: Text, email: Text, contrasena: Text, telefono: Text, tipo: TipoUsuario): Usuario
-        +iniciarSesion(email: Text, contrasena: Text): Usuario
-        +cerrarSesion(usuario: Usuario): void
-        +listarUsuarios(solicitante: Usuario): List~Usuario~
-        +actualizarPerfil(usuario: Usuario, ...): void
-    }
-
-    class GestorAlojamiento {
-        - List~Alojamiento~ alojamientos
-        +agregarAlojamiento(anfitrion: Anfitrion, alojamiento: Alojamiento): void
-        +listarAlojamientos(): List~Alojamiento~
-        +buscarPorCriterios(tipo: TipoAlojamiento, precioMax: Decimal, disponible: Boolean): List~Alojamiento~
-    }
-
-    class GestorReserva {
-        - List~Reserva~ reservas
-        +crearReserva(viajero: Viajero, alojamiento: Alojamiento, inicio: Date, fin: Date, codigo: CodigoDescuento): Reserva
-        +cancelarReserva(viajero: Viajero, reserva: Reserva): void
-        +verDetalleReserva(id: Number, solicitante: Usuario): Reserva
-    }
-
-    class GestorPago {
-        - List~Pago~ pagos
-        +procesarPago(reserva: Reserva): Pago
-        +listarPagos(solicitante: Usuario): List~Pago~
-    }
-
-    class GestorCodigoDescuento {
-        - List~CodigoDescuento~ codigos
-        +crearCodigo(admin: Administrador, codigo: Text, tipoCodigoDescuento: TipoCodigoDescuento, monto: Decimal, expira: DateTime): void
-        +buscarCodigo(codigo: Text): CodigoDescuento
-        +aplicarCodigo(reserva: Reserva, codigo: Text): void
-    }
-
-    class GestorResenia {
-        - List~Resenia~ resenias
-        +crearReseniaAlojamiento(v: Viajero, a: Alojamiento, puntaje: Number, comentario: Text): Resenia
-        +crearReseniaAnfitrion(v: Viajero, h: Anfitrion, puntaje: Number, comentario: Text): Resenia
-        +listarPorAlojamiento(a: Alojamiento): List~Resenia~
-        +listarPorUsuario(u: Usuario): List~Resenia~
-        +eliminarResenia(solicitante: Usuario, resenia: Resenia): void
-    }
-
-%% ========= RELACIONES DE HERENCIA E IMPLEMENTACIÓN =========
     IGestor <|.. Gestor
     Persistible <|.. Gestor
-    Autenticable <|.. Usuario
+
+%% ========= GESTORES ESPECIALIZADOS =========
+    class GestorUsuario
+    class GestorAlojamiento
+    class GestorReserva
+    class GestorPago
+    class GestorCodigoDescuento
+    class GestorResenia
 
     Gestor <|-- GestorUsuario
     Gestor <|-- GestorAlojamiento
@@ -217,7 +191,6 @@ classDiagram
     Gestor <|-- GestorCodigoDescuento
     Gestor <|-- GestorResenia
 
-%% ========= IMPLEMENTACIÓN DE PERSISTENCIA =========
     GestorUsuario ..|> Persistible
     GestorAlojamiento ..|> Persistible
     GestorReserva ..|> Persistible

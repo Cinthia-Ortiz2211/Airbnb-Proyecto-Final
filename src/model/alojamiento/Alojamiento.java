@@ -1,11 +1,13 @@
 package model.alojamiento;
 
+import contract.Identificable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Alojamiento {
+public class Alojamiento implements Identificable {
     private static int contador = 0;
-    private int idAlojamiento;
+    private int id;
     private String direccion;
     private String tipo; // Puede ser:  casa, departamento, habitación
     private String descripcion;
@@ -14,7 +16,7 @@ public class Alojamiento {
     private int idAnfitrion;
 
     public Alojamiento(String direccion, String tipo, String descripcion, float precioPorNoche, List<String> diasDisponibles, int idAnfitrion) {
-        this.idAlojamiento = ++contador;
+        this.id = ++contador;
         this.direccion = direccion;
         this.tipo = tipo;
         this.descripcion = descripcion;
@@ -25,7 +27,7 @@ public class Alojamiento {
 
 
     public int getIdAlojamiento() {
-        return idAlojamiento;
+        return id;
     }
 
     public String getDireccion() {
@@ -63,7 +65,7 @@ public class Alojamiento {
     @Override
     public String toString() {
         return "Alojamiento{" +
-                "idAlojamiento=" + idAlojamiento +
+                "id=" + id +
                 ", direccion='" + direccion + '\'' +
                 ", tipo='" + tipo + '\'' +
                 ", descripcion='" + descripcion + '\'' +
@@ -71,5 +73,9 @@ public class Alojamiento {
                 ", diasDisponibles=" + diasDisponibles +
                 ", idAnfitrion=" + idAnfitrion +
                 '}';
+    }
+
+    public int getId() {
+        return id;
     }
 }

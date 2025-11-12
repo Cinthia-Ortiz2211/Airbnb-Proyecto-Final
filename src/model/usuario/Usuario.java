@@ -1,13 +1,15 @@
 package model.usuario;
 
 import java.time.LocalDateTime;
+
+import contract.Identificable;
 import exception.UsuarioNoEncontradoException;
 import contract.Autenticable;
 
 /**
  * Clase abstracta base para todos los tipos de usuario del sistema.
  */
-public abstract class Usuario implements Autenticable {
+public abstract class Usuario implements Autenticable, Identificable {
 
     private static int contador = 0;
 
