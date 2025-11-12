@@ -56,7 +56,7 @@ public class GestorReserva extends Gestor<Reserva> implements Persistible {
 
         if (gestorCodigoDescuento != null && codigoDescuento != null && !codigoDescuento.isEmpty()) {
             costoFinal = gestorCodigoDescuento.aplicarCodigo(costoBase, codigoDescuento);
-            System.out.println("💸 Descuento aplicado (" + codigoDescuento + "): $" + (costoBase - costoFinal));
+            System.out.println(" Descuento aplicado (" + codigoDescuento + "): $" + (costoBase - costoFinal));
         }
 
         Reserva reserva = new Reserva(alojamiento, viajero, inicio, fin, costoFinal);
