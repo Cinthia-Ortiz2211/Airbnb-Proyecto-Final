@@ -1,4 +1,4 @@
-package model.Alojamiento;
+package model.alojamiento;
 
 import java.util.ArrayList;
 import java.util.List;

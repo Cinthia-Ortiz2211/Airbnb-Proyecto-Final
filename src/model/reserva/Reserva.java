@@ -1,4 +1,4 @@
-package model.Reserva;
+package model.reserva;
 
 import contract.Reservable;
 import java.time.LocalDateTime;
