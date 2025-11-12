@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import contract.IGestor;
-import model.usuario.Usuario;
+import contract.Identificable;
 
-public class Gestor<E extends Usuario> implements IGestor<E> {
+public class Gestor<E extends Identificable> implements IGestor<E> {
 
     protected List<E> elementos;
 

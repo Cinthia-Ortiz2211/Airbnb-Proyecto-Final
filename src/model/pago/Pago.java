@@ -1,9 +1,10 @@
 package model.pago;
 
+import contract.Identificable;
 import model.reserva.Reserva;
 import model.enums.EstadoPago;
 
-public class Pago {
+public class Pago implements Identificable {
 
     private static int contador = 0;
 
