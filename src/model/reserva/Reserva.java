@@ -1,90 +1,89 @@
 package model.reserva;
 
-import contract.Reservable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import model.alojamiento.Alojamiento;
+import model.usuario.Viajero;
 
-import exception.ReservaInvalidaException;
+public class Reserva {
 
-
-public class Reserva implements Reservable {
     private static int contador = 0;
-    private int idReserva;
-    private LocalDateTime fechaInicio;
-    private LocalDateTime fechaFin;
-    private float costoTotal;
-    private String estado; // Pendiente, Confirmada, Cancelada
-    private ArrayList<String> diasReservados;
-    private int idViajero;
-    private int idAlojamiento;
-    private int idPago;
 
-    public Reserva(LocalDateTime fechaInicio, LocalDateTime fechaFin, float costoTotal,
-                   ArrayList<String> diasReservados, int idViajero, int idAlojamiento) {
-        if (fechaFin.isBefore(fechaInicio)) {
-            throw new ReservaInvalidaException("La fecha de fin no puede ser anterior a la de inicio");
-        }
-        if (costoTotal <= 0) {
-            throw new ReservaInvalidaException("El costo total de la reserva debe ser mayor a cero ");
-        }
-        if (diasReservados == null || diasReservados.isEmpty()) {
-            throw new ReservaInvalidaException("Debe incluir al menos un dia reservado ");
-        }
+    private int id;
+    private Alojamiento alojamiento;
+    private Viajero viajero;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    private double costoTotal;
+    private boolean pendiente;
 
-        this.idReserva = ++contador;
+
+    public Reserva(Alojamiento alojamiento, Viajero viajero,
+                   LocalDate fechaInicio, LocalDate fechaFin, boolean pendiente) {
+        this.id = ++contador;
+        this.alojamiento = alojamiento;
+        this.viajero = viajero;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.diasReservados = diasReservados;
-        this.costoTotal = costoTotal;
-        this.idViajero = idViajero;
-        this.idAlojamiento = idAlojamiento;
-        this.estado = "Pendiente";
+        this.pendiente = pendiente;
+        this.costoTotal = calcularCosto();
+    }
+
+    public Reserva(int id, Alojamiento alojamiento, Viajero viajero,
+                   LocalDate fechaInicio, LocalDate fechaFin, boolean pendiente) {
+        this.id = id;
+        if (id > contador) contador = id;
+        this.alojamiento = alojamiento;
+        this.viajero = viajero;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.pendiente = pendiente;
+        this.costoTotal = calcularCosto();
     }
 
 
-    // immplementación de la interfaz Reservable
-    @Override
-    public void crearReserva() {
-        System.out.println("Reserva creada con ID: " + idReserva);
+    public int getId() { return id; }
+    public Alojamiento getAlojamiento() { return alojamiento; }
+    public Viajero getViajero() { return viajero; }
+    public LocalDate getFechaInicio() { return fechaInicio; }
+    public LocalDate getFechaFin() { return fechaFin; }
+    public double getCostoTotal() { return costoTotal; }
+    public boolean isPendiente() { return pendiente; }
+
+
+    public double calcularCosto() {
+        long dias = ChronoUnit.DAYS.between(fechaInicio, fechaFin);
+        if (dias <= 0) {
+            throw new IllegalArgumentException("La fecha de fin debe ser posterior a la de inicio.");
+        }
+        return dias * alojamiento.getPrecioPorNoche();
     }
 
-    @Override
-    public void confirmarReserva() {
-        this.estado = "Confirmada";
-        System.out.println("Reserva " + idReserva + " confirmada.");
+    public void cancelar() {
+        this.pendiente = false;
+        System.out.println("Reserva #" + id + " cancelada con éxito.");
     }
 
-    @Override
-    public void cancelarReserva() {
-        this.estado = "Cancelada";
-        System.out.println("Reserva " + idReserva + " cancelada.");
+    public String verDetalle() {
+        return "Reserva #" + id + " | " +
+                "Alojamiento: " + alojamiento.getDireccion() + " | " +
+                "Viajero: " + viajero.getNombre() + " | " +
+                "Desde: " + fechaInicio + " Hasta: " + fechaFin + " | " +
+                "Costo total: $" + costoTotal + " | " +
+                (pendiente ? "Pendiente" : "Confirmada/Cancelada");
     }
 
-    public void asociarPago(int idPago) {
-        this.idPago = idPago;
-        System.out.println("Pago asociado a la reserva " + idReserva);
+
+    public static void actualizarContador(int ultimoId) {
+        if (ultimoId > contador) contador = ultimoId;
     }
 
-    // Getters y toString
-    public int getIdReserva() {
-        return idReserva;
-    }
-
-    public String getEstado() {
-        return estado;
+    public static int getSiguienteId() {
+        return ++contador;
     }
 
     @Override
     public String toString() {
-        return "Reserva{" +
-                "idReserva=" + idReserva +
-                ", fechaInicio=" + fechaInicio +
-                ", fechaFin=" + fechaFin +
-                ", costoTotal=" + costoTotal +
-                ", estado='" + estado + '\'' +
-                ", idViajero=" + idViajero +
-                ", idAlojamiento=" + idAlojamiento +
-                ", idPago=" + idPago +
-                '}';
+        return verDetalle();
     }
 }
