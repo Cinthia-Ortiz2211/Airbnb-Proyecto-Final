@@ -1,91 +1,65 @@
 package model.pago;
 
-import java.time.LocalDateTime;
+import model.reserva.Reserva;
+import model.enums.EstadoPago;
 
 public class Pago {
+
     private static int contador = 0;
-    private int idPago;
-    private float monto;
-    private LocalDateTime fechaDePago;
-    private String estadoDePago; // Puede ser: "Aprobado", "Rechazado", "Pendiente"
-    private int idReserva;
 
-    public Pago(float monto, int idReserva) {
-        this.idPago = ++contador;
+    private int id;
+    private Reserva reserva;
+    private double monto;
+    private EstadoPago estado;
+
+    public Pago(Reserva reserva, double monto) {
+        this.id = ++contador;
+        this.reserva = reserva;
         this.monto = monto;
-        this.idReserva = idReserva;
-        this.estadoDePago = "Pendiente";
-        this.fechaDePago = null;
+        this.estado = EstadoPago.PENDIENTE;
     }
 
-    // ---------- METODOS PRINCIPALES ----------
-    public void procesarPago() {
-        System.out.println("Procesando pago ID " + idPago + " por $" + monto + "...");
-        this.fechaDePago = LocalDateTime.now();
-        this.estadoDePago = "Pendiente";
+    public Pago(int id, Reserva reserva, double monto) {
+        this.id = id;
+        if (id > contador) contador = id;
+        this.reserva = reserva;
+        this.monto = monto;
+        this.estado = EstadoPago.PENDIENTE;
     }
 
-    public void confirmarPago() {
-        if (!this.estadoDePago.equals("Aprobado")) {
-            this.estadoDePago = "Aprobado";
-            this.fechaDePago = LocalDateTime.now();
-            System.out.println("Pago confirmado (ID " + idPago + ")");
+
+    public int getId() { return id; }
+    public Reserva getReserva() { return reserva; }
+    public double getMonto() { return monto; }
+    public EstadoPago getEstado() { return estado; }
+    public void setEstado(EstadoPago estado) { this.estado = estado; }
+
+    public void procesar() {
+        if (estado == EstadoPago.PENDIENTE) {
+            estado = EstadoPago.APROBADO;
+            System.out.println("Pago #" + id + " procesado correctamente.");
         } else {
-            System.out.println("El pago ya estaba aprobado.");
+            System.out.println("El pago #" + id + " ya fue procesado o rechazado.");
         }
     }
 
-    public void rechazarPago() {
-        this.estadoDePago = "Rechazado";
-        this.fechaDePago = LocalDateTime.now();
-        System.out.println("Pago rechazado (ID " + idPago + ")");
+    public String verDetalle() {
+        return "Pago #" + id +
+                " | Reserva: " + (reserva != null ? reserva.getId() : "sin referencia") +
+                " | Monto: $" + monto +
+                " | Estado: " + estado;
     }
 
-    // ---------- GETTERS Y SETTERS ----------
-    public int getIdPago() {
-        return idPago;
+    public static void actualizarContador(int ultimoId) {
+        if (ultimoId > contador) contador = ultimoId;
     }
 
-    public float getMonto() {
-        return monto;
-    }
-
-    public void setMonto(float monto) {
-        this.monto = monto;
-    }
-
-    public LocalDateTime getFechaDePago() {
-        return fechaDePago;
-    }
-
-    public void setFechaDePago(LocalDateTime fechaDePago) {
-        this.fechaDePago = fechaDePago;
-    }
-
-    public String getEstadoDePago() {
-        return estadoDePago;
-    }
-
-    public void setEstadoDePago(String estadoDePago) {
-        this.estadoDePago = estadoDePago;
-    }
-
-    public int getIdReserva() {
-        return idReserva;
-    }
-
-    public void setIdReserva(int idReserva) {
-        this.idReserva = idReserva;
+    public static int getSiguienteId() {
+        return ++contador;
     }
 
     @Override
     public String toString() {
-        return "Pago{" +
-                "idPago=" + idPago +
-                ", monto=" + monto +
-                ", fechaDePago=" + fechaDePago +
-                ", estadoDePago='" + estadoDePago + '\'' +
-                ", idReserva=" + idReserva +
-                '}';
+        return verDetalle();
     }
 }
