@@ -8,10 +8,7 @@ import util.JsonUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- * Gestor especializado en la administración de usuarios.
- * Implementa Persistible para guardar y cargar desde JSON.
- */
+
 public class GestorUsuario extends Gestor<Usuario> implements Persistible {
 
     private static final String ARCHIVO = "usuarios.json";
@@ -21,9 +18,7 @@ public class GestorUsuario extends Gestor<Usuario> implements Persistible {
         cargarDesdeArchivo();
     }
 
-    /**
-     * Registra un nuevo usuario y lo guarda en el archivo JSON.
-     */
+
     public Usuario registrar(String nombre, String email, String contrasena, String telefono, TipoUsuario tipo) {
         Usuario usuario = null;
 
@@ -48,9 +43,7 @@ public class GestorUsuario extends Gestor<Usuario> implements Persistible {
         return usuario;
     }
 
-    /**
-     * Inicia sesión para un usuario existente.
-     */
+
     public Usuario iniciarSesion(String email, String contrasena) {
         for (Usuario u : elementos) {
             if (u.getEmail().equals(email)) {
@@ -64,16 +57,12 @@ public class GestorUsuario extends Gestor<Usuario> implements Persistible {
         throw new RuntimeException("Usuario no encontrado: " + email);
     }
 
-    /**
-     * Cierra sesión del usuario.
-     */
+
     public void cerrarSesion(Usuario usuario) {
         usuario.cerrarSesion();
     }
 
-    /**
-     * Solo un administrador puede listar los usuarios.
-     */
+
     public List<Usuario> listarUsuarios(Usuario solicitante) {
         if (!(solicitante instanceof Administrador)) {
             throw new SecurityException("Solo un administrador puede listar los usuarios.");
@@ -81,9 +70,7 @@ public class GestorUsuario extends Gestor<Usuario> implements Persistible {
         return listar();
     }
 
-    /**
-     * Guarda los usuarios en formato JSON.
-     */
+
     @Override
     public void guardarEnArchivo() {
         JSONArray array = new JSONArray();
@@ -102,9 +89,7 @@ public class GestorUsuario extends Gestor<Usuario> implements Persistible {
         }
     }
 
-    /**
-     * Carga los usuarios desde el archivo JSON.
-     */
+
     @Override
     public void cargarDesdeArchivo() {
         JSONArray array = JsonUtil.leer(ARCHIVO);

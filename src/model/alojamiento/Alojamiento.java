@@ -37,7 +37,7 @@ public class Alojamiento implements Identificable {
             Anfitrion anfitrion
     ) {
         this.id = id;
-        if (id > contador) contador = id; // sincroniza el contador al leer desde JSON
+        if (id > contador) contador = id;
 
         this.direccion = direccion;
         this.tipo = (tipo != null) ? tipo : TipoAlojamiento.CASA;

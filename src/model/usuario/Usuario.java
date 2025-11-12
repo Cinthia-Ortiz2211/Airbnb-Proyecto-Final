@@ -6,9 +6,6 @@ import contract.Identificable;
 import exception.UsuarioNoEncontradoException;
 import contract.Autenticable;
 
-/**
- * Clase abstracta base para todos los tipos de usuario del sistema.
- */
 public abstract class Usuario implements Autenticable, Identificable {
 
     private static int contador = 0;
@@ -31,14 +28,14 @@ public abstract class Usuario implements Autenticable, Identificable {
         this.fechaDeRegistro = LocalDateTime.now();
     }
 
-    // Getters
+
     public int getId() { return id; }
     public String getNombre() { return nombre; }
     public String getEmail() { return email; }
     public TipoUsuario getTipoUsuario() { return tipoUsuario; }
     public boolean isSesionActiva() { return sesionActiva; }
 
-    // Implementación de la interfaz Autenticable
+
     @Override
     public boolean iniciarSesion(String email, String contrasena) {
         if (this.email.equals(email) && this.contrasena.equals(contrasena)) {
