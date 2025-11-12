@@ -27,6 +27,7 @@ public class Reserva implements Identificable {
         this.viajero = viajero;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.pendiente = pendiente;
         this.costoTotal = calcularCosto();
     }
 
