@@ -1,0 +1,43 @@
+[
+  {
+    "id": 1,
+    "nombre": "Sr. Burns",
+    "email": "burns@planta-nuclear.com",
+    "contrasena": "excelente",
+    "telefono": "555-1001",
+    "tipo": "ADMINISTRADOR"
+  },
+  {
+    "id": 2,
+    "nombre": "Moe Szyslak",
+    "email": "moe@tabernademoe.com",
+    "contrasena": "moebar123",
+    "telefono": "555-1002",
+    "tipo": "ANFITRION"
+  },
+  {
+    "id": 3,
+    "nombre": "Ned Flanders",
+    "email": "ned@okilydokily.com",
+    "contrasena": "bendiciones",
+    "telefono": "555-1003",
+    "tipo": "ANFITRION"
+  },
+  {
+    "id": 4,
+    "nombre": "Homero Simpson",
+    "email": "homero@duffmail.com",
+    "contrasena": "donas123",
+    "telefono": "555-1004",
+    "tipo": "VIAJERO"
+  },
+  {
+    "id": 5,
+    "nombre": "Marge Simpson",
+    "email": "marge@familiasimpson.com",
+    "contrasena": "cabelloazul",
+    "telefono": "555-1005",
+    "tipo": "VIAJERO"
+  }
+]
+

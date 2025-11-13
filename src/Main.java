@@ -10,6 +10,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+
 public class Main {
 
     private static GestorUsuario gestorUsuario;
@@ -23,6 +27,7 @@ public class Main {
     private static Usuario usuarioActual = null;
 
     public static void main(String[] args) {
+        inicializarBaseDeDatos();
         inicializarSistema();
         flujoPrincipal();
         System.out.println("\n Gracias por usar el sistema de gestión de alojamientos. ¡Hasta pronto!");
@@ -338,5 +343,37 @@ public class Main {
             System.out.println(todas.get(i).verDetalle());
             System.out.println("----------------------------------");
         }
+    }
+
+    private static void inicializarBaseDeDatos() {
+        System.out.println("=== Inicializando base de datos desde /sample_data ===");
+
+        Path sampleDataDir = Paths.get("sample_data");
+        Path dbDir = Paths.get("db");
+
+        try {
+            if (!Files.exists(dbDir)) {
+                Files.createDirectory(dbDir);
+                System.out.println(" Carpeta /db creada.");
+            }
+        } catch (IOException e) {
+            System.err.println(" Error al crear carpeta /db: " + e.getMessage());
+        }
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(sampleDataDir, "*.json")) {
+            for (Path archivo : stream) {
+                Path destino = dbDir.resolve(archivo.getFileName());
+                if (!Files.exists(destino)) {
+                    Files.copy(archivo, destino, StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println(" Copiado: " + archivo.getFileName());
+                } else {
+                    System.out.println(" Ya existe: " + archivo.getFileName() + " (no se sobrescribe)");
+                }
+            }
+        } catch (IOException e) {
+            System.err.println(" Error al copiar archivos desde sample_data: " + e.getMessage());
+        }
+
+        System.out.println("Base de datos inicializada.\n");
     }
 }

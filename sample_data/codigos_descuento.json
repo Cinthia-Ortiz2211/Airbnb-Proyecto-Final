@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "codigo": "DUFF10",
+    "tipo": "PORCENTAJE",
+    "monto": 10.0,
+    "fechaExpiracion": "2025-12-31T23:59:59"
+  },
+  {
+    "id": 2,
+    "codigo": "FLANDERS5",
+    "tipo": "FIJO",
+    "monto": 5.0,
+    "fechaExpiracion": "2025-11-30T23:59:59"
+  },
+  {
+    "id": 3,
+    "codigo": "BURNSEXCELENTE",
+    "tipo": "FIJO",
+    "monto": 20.0,
+    "fechaExpiracion": "2026-01-01T00:00:00"
+  }
+]

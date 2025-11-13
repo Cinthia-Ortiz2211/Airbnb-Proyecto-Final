@@ -15,7 +15,7 @@ import java.util.List;
 
 public class GestorResenia extends Gestor<Resenia> implements Persistible {
 
-    private static final String ARCHIVO = "src/persistence/resenias.json";
+    private static final String ARCHIVO = "db/resenias.json";
 
     private GestorUsuario gestorUsuario;
     private GestorAlojamiento gestorAlojamiento;

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class GestorCodigoDescuento extends Gestor<CodigoDescuento> implements Persistible {
 
-    private static final String ARCHIVO = "src/persistence/codigos_descuento.json";
+    private static final String ARCHIVO = "db/codigos_descuento.json";
 
 
     public GestorCodigoDescuento() {

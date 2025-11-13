@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GestorAlojamiento extends Gestor<Alojamiento> implements Persistible {
 
-    private static final String ARCHIVO = "src/persistence/alojamientos.json";
+    private static final String ARCHIVO = "db/alojamientos.json";
     private GestorUsuario gestorUsuario;
 
     public GestorAlojamiento() {
