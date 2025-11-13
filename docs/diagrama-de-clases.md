@@ -66,7 +66,7 @@ classDiagram
         - Text email
         - Text contrasena
         - Text numeroTelefonico
-        - DateTime fechaDeRegistro
+        - DateTime fechaRegistro
         - TipoUsuario tipoUsuario
         +getId(): Number
         +getNombre(): Text

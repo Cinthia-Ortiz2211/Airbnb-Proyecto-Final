@@ -39,8 +39,9 @@ public class Main {
         gestorUsuario = new GestorUsuario();
         gestorAlojamiento = new GestorAlojamiento(gestorUsuario);
         gestorCodigoDescuento = new GestorCodigoDescuento();
-        gestorPago = new GestorPago();
-        gestorReserva = new GestorReserva(gestorAlojamiento, gestorUsuario, gestorCodigoDescuento, gestorPago);
+        gestorReserva = new GestorReserva(gestorAlojamiento, gestorUsuario, gestorCodigoDescuento, null);
+        gestorPago = new GestorPago(gestorReserva);
+        gestorReserva.setGestorPago(gestorPago);
         gestorResenia = new GestorResenia(gestorUsuario, gestorAlojamiento);
         System.out.println("Sistema inicializado correctamente.\n");
     }

@@ -40,41 +40,48 @@ public class GestorAlojamiento extends Gestor<Alojamiento> implements Persistibl
         return listar();
     }
 
+    private Anfitrion buscarAnfitrion(String email) {
+        if (gestorUsuario != null) {
+            List<Usuario> usuarios = gestorUsuario.listar();
+            for (int i = 0; i < usuarios.size(); i++) {
+                Usuario u = usuarios.get(i);
+                if (u instanceof Anfitrion) {
+                    Anfitrion posible = (Anfitrion) u;
+                    if (posible.getEmail().equals(email)) {
+                        return posible;
+                    }
+                }
+            }
+        }
+        return new Anfitrion("Anfitrión temporal", email, "default");
+    }
 
     @Override
     public void guardarEnArchivo() {
         JSONArray array = new JSONArray();
-        try {
-            for (int i = 0; i < elementos.size(); i++) {
-                Alojamiento a = elementos.get(i);
-                JSONObject json = new JSONObject();
 
+        try {
+            for (Alojamiento a : elementos) {
+                JSONObject json = new JSONObject();
                 json.put("id", a.getId());
                 json.put("direccion", a.getDireccion());
-                json.put("tipo", a.getTipo().toString());
+                json.put("tipo", a.getTipo().name());
                 json.put("nivel", a.getNivel());
                 json.put("descripcion", a.getDescripcion());
                 json.put("precioPorNoche", a.getPrecioPorNoche());
 
-                // Fechas disponibles
                 JSONArray fechas = new JSONArray();
-                List<LocalDate> disponibles = a.getFechasDisponibles();
-                if (disponibles != null) {
-                    for (int j = 0; j < disponibles.size(); j++) {
-                        fechas.put(disponibles.get(j).toString());
-                    }
+                for (LocalDate f : a.getFechasDisponibles()) {
+                    fechas.put(f.toString());
                 }
                 json.put("fechasDisponibles", fechas);
 
-                if (a.getAnfitrion() != null) {
-                    json.put("anfitrion", a.getAnfitrion().getEmail());
-                } else {
-                    json.put("anfitrion", JSONObject.NULL);
-                }
+                json.put("anfitrion", a.getAnfitrion() != null ? a.getAnfitrion().getEmail() : JSONObject.NULL);
 
                 array.put(json);
             }
             JsonUtil.grabar(array, ARCHIVO);
+
         } catch (JSONException e) {
             System.err.println("Error al guardar alojamientos: " + e.getMessage());
         }
@@ -91,45 +98,34 @@ public class GestorAlojamiento extends Gestor<Alojamiento> implements Persistibl
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
 
-                int id = obj.optInt("id", 0);
-                String direccion = obj.optString("direccion");
-                String tipoStr = obj.optString("tipo");
-                String nivel = obj.optString("nivel");
-                String descripcion = obj.optString("descripcion");
-                double precio = obj.optDouble("precioPorNoche", 0.0);
+                int id = obj.getInt("id");
+                String direccion = obj.getString("direccion");
+                TipoAlojamiento tipo = TipoAlojamiento.valueOf(obj.getString("tipo"));
+                String nivel = obj.getString("nivel");
+                String descripcion = obj.getString("descripcion");
+                double precio = obj.getDouble("precioPorNoche");
 
-                // Fechas disponibles
-                List<LocalDate> fechasDisponibles = new ArrayList<>();
-                JSONArray fechasJson = obj.optJSONArray("fechasDisponibles");
-                if (fechasJson != null) {
-                    for (int j = 0; j < fechasJson.length(); j++) {
-                        fechasDisponibles.add(LocalDate.parse(fechasJson.getString(j)));
+                List<LocalDate> fechas = new ArrayList<>();
+                JSONArray arrFechas = obj.getJSONArray("fechasDisponibles");
+                for (int j = 0; j < arrFechas.length(); j++) {
+                    fechas.add(LocalDate.parse(arrFechas.getString(j)));
+                }
+
+                String emailAnfitrion = obj.optString("anfitrion", null);
+
+                Anfitrion anfitrion = null;
+                if (emailAnfitrion != null && !emailAnfitrion.equals("null")) {
+                    for (Usuario u : gestorUsuario.listar()) {
+                        if (u instanceof Anfitrion && u.getEmail().equals(emailAnfitrion)) {
+                            anfitrion = (Anfitrion) u;
+                            break;
+                        }
                     }
                 }
 
-                String emailAnfitrion = obj.optString("anfitrion");
-                Anfitrion anfitrion = buscarAnfitrion(emailAnfitrion);
-
-                TipoAlojamiento tipo;
-                try {
-                    tipo = TipoAlojamiento.valueOf(tipoStr.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    tipo = TipoAlojamiento.CASA;
-                }
-
-                Alojamiento alojamiento = new Alojamiento(
-                        id,
-                        direccion,
-                        tipo,
-                        nivel,
-                        descripcion,
-                        precio,
-                        fechasDisponibles,
-                        anfitrion
-                );
+                Alojamiento alojamiento = new Alojamiento(id, direccion, tipo, nivel, descripcion, precio, fechas, anfitrion);
 
                 agregar(alojamiento);
-
                 if (id > maxId) maxId = id;
             }
 
@@ -140,19 +136,5 @@ public class GestorAlojamiento extends Gestor<Alojamiento> implements Persistibl
         }
     }
 
-    private Anfitrion buscarAnfitrion(String email) {
-        if (gestorUsuario != null) {
-            List<Usuario> usuarios = gestorUsuario.listar();
-            for (int i = 0; i < usuarios.size(); i++) {
-                Usuario u = usuarios.get(i);
-                if (u instanceof Anfitrion) {
-                    Anfitrion posible = (Anfitrion) u;
-                    if (posible.getEmail().equals(email)) {
-                        return posible;
-                    }
-                }
-            }
-        }
-        return new Anfitrion("Anfitrión temporal", email, "default");
-    }
+
 }

@@ -1,5 +1,6 @@
 package model.gestor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import model.usuario.*;
 import contract.Persistible;
@@ -93,12 +94,15 @@ public class GestorUsuario extends Gestor<Usuario> implements Persistible {
                 json.put("id", u.getId());
                 json.put("nombre", u.getNombre());
                 json.put("email", u.getEmail());
-                json.put("tipo", u.getTipoUsuario().toString());
+                json.put("contrasena", u.getContrasena());
+                json.put("telefono", u.getTelefono());
+                json.put("tipo", u.getTipoUsuario().name());
+                json.put("fechaRegistro", u.getfechaRegistro().toString());
                 array.put(json);
             }
             JsonUtil.grabar(array, ARCHIVO);
         } catch (JSONException e) {
-            System.err.println("Error al generar JSON de usuarios: " + e.getMessage());
+            System.err.println("Error al guardar usuarios: " + e.getMessage());
         }
     }
 
@@ -108,18 +112,36 @@ public class GestorUsuario extends Gestor<Usuario> implements Persistible {
     @Override
     public void cargarDesdeArchivo() {
         JSONArray array = JsonUtil.leer(ARCHIVO);
+        if (array == null) return;
+
+        int maxId = 0;
 
         try {
             for (int i = 0; i < array.length(); i++) {
-                JSONObject obj = array.getJSONObject(i);
-                String nombre = obj.getString("nombre");
-                String email = obj.getString("email");
-                String contrasena = obj.optString("contrasena", "default");
-                TipoUsuario tipo = TipoUsuario.valueOf(obj.getString("tipo"));
-                registrar(nombre, email, contrasena, "", tipo);
+                JSONObject o = array.getJSONObject(i);
+
+                int id = o.getInt("id");
+                String nombre = o.getString("nombre");
+                String email = o.getString("email");
+                String contrasena = o.getString("contrasena");
+                String telefono = o.optString("telefono", null);
+                LocalDateTime fecha = LocalDateTime.parse(o.getString("fechaRegistro"));
+                TipoUsuario tipo = TipoUsuario.valueOf(o.getString("tipo"));
+
+                Usuario u = switch (tipo) {
+                    case ADMINISTRADOR -> new Administrador(id, nombre, email, contrasena, telefono, fecha);
+                    case ANFITRION -> new Anfitrion(id, nombre, email, contrasena, telefono, fecha);
+                    case VIAJERO -> new Viajero(id, nombre, email, contrasena, telefono, fecha);
+                };
+
+                agregar(u);
+                if (id > maxId) maxId = id;
             }
+
+            Usuario.actualizarContador(maxId);
+
         } catch (JSONException e) {
-            System.err.println("Error al cargar usuarios desde JSON: " + e.getMessage());
+            System.err.println("Error al cargar usuarios: " + e.getMessage());
         }
     }
 }
