@@ -42,10 +42,21 @@ public class CodigoDescuento implements Identificable {
     }
 
 
-    public String getCodigo() { return codigo; }
-    public TipoCodigoDescuento getTipo() { return tipo; }
-    public double getMonto() { return monto; }
-    public LocalDateTime getFechaExpiracion() { return fechaExpiracion; }
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public TipoCodigoDescuento getTipo() {
+        return tipo;
+    }
+
+    public double getMonto() {
+        return monto;
+    }
+
+    public LocalDateTime getFechaExpiracion() {
+        return fechaExpiracion;
+    }
 
     public boolean esValido(LocalDateTime fechaActual) {
         return fechaActual.isBefore(fechaExpiracion);
@@ -60,7 +71,6 @@ public class CodigoDescuento implements Identificable {
     }
 
     public String verDetalle() {
-        return "Código #" + id + " (" + codigo + ") | Tipo: " + tipo +
-                " | Monto: " + monto + " | Expira: " + fechaExpiracion;
+        return "Código #" + id + " (" + codigo + ") | Tipo: " + tipo + " | Monto: " + monto + " | Expira: " + fechaExpiracion;
     }
 }
