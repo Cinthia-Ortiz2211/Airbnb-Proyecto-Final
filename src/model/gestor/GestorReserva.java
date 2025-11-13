@@ -44,6 +44,9 @@ public class GestorReserva extends Gestor<Reserva> implements Persistible {
         cargarDesdeArchivo();
     }
 
+    public void setGestorPago(GestorPago gp) {
+        this.gestorPago = gp;
+    }
 
     public Reserva crearReserva(Viajero viajero, Alojamiento alojamiento,
                                 LocalDate inicio, LocalDate fin, String codigoDescuento) {
@@ -90,13 +93,14 @@ public class GestorReserva extends Gestor<Reserva> implements Persistible {
     @Override
     public void guardarEnArchivo() {
         JSONArray array = new JSONArray();
+
         try {
             for (Reserva r : elementos) {
                 JSONObject json = new JSONObject();
 
                 json.put("id", r.getId());
-                json.put("alojamiento", r.getAlojamiento() != null ? r.getAlojamiento().getId() : -1);
-                json.put("viajero", r.getViajero() != null ? r.getViajero().getEmail() : JSONObject.NULL);
+                json.put("alojamiento", r.getAlojamiento().getId());
+                json.put("viajero", r.getViajero().getEmail());
                 json.put("fechaInicio", r.getFechaInicio().toString());
                 json.put("fechaFin", r.getFechaFin().toString());
                 json.put("costoTotal", r.getCostoTotal());
@@ -104,7 +108,9 @@ public class GestorReserva extends Gestor<Reserva> implements Persistible {
 
                 array.put(json);
             }
+
             JsonUtil.grabar(array, ARCHIVO);
+
         } catch (JSONException e) {
             System.err.println("Error al guardar reservas: " + e.getMessage());
         }
@@ -112,22 +118,22 @@ public class GestorReserva extends Gestor<Reserva> implements Persistible {
 
     @Override
     public void cargarDesdeArchivo() {
-        JSONArray array = JsonUtil.leer(ARCHIVO);
-        if (array == null) return;
+        JSONArray arr = JsonUtil.leer(ARCHIVO);
+        if (arr == null) return;
 
         int maxId = 0;
 
         try {
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject obj = array.getJSONObject(i);
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject o = arr.getJSONObject(i);
 
-                int id = obj.getInt("id");
-                int idAlojamiento = obj.getInt("alojamiento");
-                String emailViajero = obj.getString("viajero");
-                LocalDate inicio = LocalDate.parse(obj.getString("fechaInicio"));
-                LocalDate fin = LocalDate.parse(obj.getString("fechaFin"));
-                double costo = obj.getDouble("costoTotal");
-                boolean pendiente = obj.getBoolean("pendiente");
+                int id = o.getInt("id");
+                int idAlojamiento = o.getInt("alojamiento");
+                String emailViajero = o.getString("viajero");
+                LocalDate inicio = LocalDate.parse(o.getString("fechaInicio"));
+                LocalDate fin = LocalDate.parse(o.getString("fechaFin"));
+                double total = o.getDouble("costoTotal");
+                boolean pendiente = o.getBoolean("pendiente");
 
                 Alojamiento alojamiento = null;
                 for (Alojamiento a : gestorAlojamiento.listar()) {
@@ -145,7 +151,7 @@ public class GestorReserva extends Gestor<Reserva> implements Persistible {
                     }
                 }
 
-                Reserva r = new Reserva(id, alojamiento, viajero, inicio, fin, costo);
+                Reserva r = new Reserva(id, alojamiento, viajero, inicio, fin, total);
                 if (!pendiente) r.cancelar();
 
                 agregar(r);

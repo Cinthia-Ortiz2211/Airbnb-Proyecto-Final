@@ -71,17 +71,20 @@ public class GestorCodigoDescuento extends Gestor<CodigoDescuento> implements Pe
     @Override
     public void guardarEnArchivo() {
         JSONArray array = new JSONArray();
+
         try {
             for (CodigoDescuento c : elementos) {
                 JSONObject json = new JSONObject();
                 json.put("id", c.getId());
                 json.put("codigo", c.getCodigo());
-                json.put("tipo", c.getTipo().toString());
+                json.put("tipo", c.getTipo().name());
                 json.put("monto", c.getMonto());
                 json.put("fechaExpiracion", c.getFechaExpiracion().toString());
                 array.put(json);
             }
+
             JsonUtil.grabar(array, ARCHIVO);
+
         } catch (JSONException e) {
             System.err.println("Error al guardar códigos: " + e.getMessage());
         }
@@ -89,23 +92,24 @@ public class GestorCodigoDescuento extends Gestor<CodigoDescuento> implements Pe
 
     @Override
     public void cargarDesdeArchivo() {
-        JSONArray array = JsonUtil.leer(ARCHIVO);
-        if (array == null) return;
+        JSONArray arr = JsonUtil.leer(ARCHIVO);
+        if (arr == null) return;
 
         int maxId = 0;
 
         try {
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject obj = array.getJSONObject(i);
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject o = arr.getJSONObject(i);
 
-                int id = obj.getInt("id");
-                String codigo = obj.getString("codigo");
-                TipoCodigoDescuento tipo = TipoCodigoDescuento.valueOf(obj.getString("tipo"));
-                double monto = obj.getDouble("monto");
-                LocalDateTime fechaExpiracion = LocalDateTime.parse(obj.getString("fechaExpiracion"));
+                int id = o.getInt("id");
+                String codigo = o.getString("codigo");
+                TipoCodigoDescuento tipo = TipoCodigoDescuento.valueOf(o.getString("tipo"));
+                double monto = o.getDouble("monto");
+                LocalDateTime exp = LocalDateTime.parse(o.getString("fechaExpiracion"));
 
-                CodigoDescuento c = new CodigoDescuento(id, codigo, tipo, monto, fechaExpiracion);
-                agregar(c);
+                CodigoDescuento cd = new CodigoDescuento(id, codigo, tipo, monto, exp);
+
+                agregar(cd);
                 if (id > maxId) maxId = id;
             }
 

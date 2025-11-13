@@ -18,7 +18,7 @@ public abstract class Usuario implements Autenticable, Identificable {
     protected String email;
     protected String contrasena;
     protected String numeroTelefonico;
-    protected LocalDateTime fechaDeRegistro;
+    protected LocalDateTime fechaRegistro;
     protected TipoUsuario tipoUsuario;
     protected boolean sesionActiva = false;
 
@@ -31,7 +31,7 @@ public abstract class Usuario implements Autenticable, Identificable {
         this.email = email;
         this.contrasena = contrasena;
         this.tipoUsuario = tipoUsuario;
-        this.fechaDeRegistro = LocalDateTime.now();
+        this.fechaRegistro = LocalDateTime.now();
     }
 
     /**
@@ -52,7 +52,7 @@ public abstract class Usuario implements Autenticable, Identificable {
         this.email = email;
         this.contrasena = contrasena;
         this.numeroTelefonico = telefono;
-        this.fechaDeRegistro = (fecha != null) ? fecha : LocalDateTime.now();
+        this.fechaRegistro = (fecha != null) ? fecha : LocalDateTime.now();
         this.tipoUsuario = tipoUsuario;
     }
 
@@ -64,13 +64,15 @@ public abstract class Usuario implements Autenticable, Identificable {
 
     public String getEmail() { return email; }
 
+    public String getContrasena() { return contrasena; }
+
     public TipoUsuario getTipoUsuario() { return tipoUsuario; }
 
     public boolean isSesionActiva() { return sesionActiva; }
 
     public String getTelefono() { return numeroTelefonico; }
 
-    public LocalDateTime getFechaDeRegistro() { return fechaDeRegistro; }
+    public LocalDateTime getfechaRegistro() { return fechaRegistro; }
 
 
     public static void actualizarContador(int ultimoId) {
@@ -112,7 +114,7 @@ public abstract class Usuario implements Autenticable, Identificable {
                 ", email='" + email + '\'' +
                 ", tipoUsuario=" + tipoUsuario +
                 ", telefono='" + (numeroTelefonico != null ? numeroTelefonico : "no especificado") + '\'' +
-                ", fechaDeRegistro=" + fechaDeRegistro +
+                ", fechaRegistro=" + fechaRegistro +
                 '}';
     }
 }

@@ -5,7 +5,8 @@
     "email": "burns@planta-nuclear.com",
     "contrasena": "excelente",
     "telefono": "555-1001",
-    "tipo": "ADMINISTRADOR"
+    "tipo": "ADMINISTRADOR",
+    "fechaRegistro": "2025-02-18T14:55:23"
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "email": "moe@tabernademoe.com",
     "contrasena": "moebar123",
     "telefono": "555-1002",
-    "tipo": "ANFITRION"
+    "tipo": "ANFITRION",
+    "fechaRegistro": "2025-02-18T14:55:23"
   },
   {
     "id": 3,
@@ -21,7 +23,8 @@
     "email": "ned@okilydokily.com",
     "contrasena": "bendiciones",
     "telefono": "555-1003",
-    "tipo": "ANFITRION"
+    "tipo": "ANFITRION",
+    "fechaRegistro": "2025-02-18T14:55:23"
   },
   {
     "id": 4,
@@ -29,7 +32,8 @@
     "email": "homero@duffmail.com",
     "contrasena": "donas123",
     "telefono": "555-1004",
-    "tipo": "VIAJERO"
+    "tipo": "VIAJERO",
+    "fechaRegistro": "2025-02-18T14:55:23"
   },
   {
     "id": 5,
@@ -37,7 +41,8 @@
     "email": "marge@familiasimpson.com",
     "contrasena": "cabelloazul",
     "telefono": "555-1005",
-    "tipo": "VIAJERO"
+    "tipo": "VIAJERO",
+    "fechaRegistro": "2025-02-18T14:55:23"
   }
 ]
 

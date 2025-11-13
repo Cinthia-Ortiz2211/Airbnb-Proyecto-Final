@@ -89,19 +89,23 @@ public class GestorResenia extends Gestor<Resenia> implements Persistible {
     @Override
     public void guardarEnArchivo() {
         JSONArray array = new JSONArray();
+
         try {
             for (Resenia r : elementos) {
                 JSONObject json = new JSONObject();
                 json.put("id", r.getId());
                 json.put("puntaje", r.getPuntaje());
                 json.put("comentario", r.getComentario());
-                json.put("autor", r.getAutor() != null ? r.getAutor().getEmail() : JSONObject.NULL);
                 json.put("fecha", r.getFecha().toString());
-                if (r.getAlojamiento() != null) json.put("alojamiento", r.getAlojamiento().getId());
-                if (r.getAnfitrion() != null) json.put("anfitrion", r.getAnfitrion().getEmail());
+                json.put("autor", r.getAutor() != null ? r.getAutor().getEmail() : JSONObject.NULL);
+                json.put("alojamiento", r.getAlojamiento() != null ? r.getAlojamiento().getId() : JSONObject.NULL);
+                json.put("anfitrion", r.getAnfitrion() != null ? r.getAnfitrion().getEmail() : JSONObject.NULL);
+
                 array.put(json);
             }
+
             JsonUtil.grabar(array, ARCHIVO);
+
         } catch (JSONException e) {
             System.err.println("Error al guardar reseñas: " + e.getMessage());
         }
@@ -109,54 +113,51 @@ public class GestorResenia extends Gestor<Resenia> implements Persistible {
 
     @Override
     public void cargarDesdeArchivo() {
-        JSONArray array = JsonUtil.leer(ARCHIVO);
-        if (array == null) return;
+        JSONArray arr = JsonUtil.leer(ARCHIVO);
+        if (arr == null) return;
 
         int maxId = 0;
 
         try {
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject obj = array.getJSONObject(i);
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject o = arr.getJSONObject(i);
 
-                int id = obj.getInt("id");
-                int puntaje = obj.getInt("puntaje");
-                String comentario = obj.getString("comentario");
-                String autorEmail = obj.getString("autor");
-                LocalDateTime fecha = LocalDateTime.parse(obj.getString("fecha"));
+                int id = o.getInt("id");
+                int puntaje = o.getInt("puntaje");
+                String comentario = o.getString("comentario");
+                LocalDateTime fecha = LocalDateTime.parse(o.getString("fecha"));
+
+                String emailAutor = o.optString("autor", null);
+                String emailAnfitrion = o.optString("anfitrion", null);
+                Integer idAlojamiento = o.optInt("alojamiento");
 
                 Viajero autor = null;
                 for (Usuario u : gestorUsuario.listar()) {
-                    if (u instanceof Viajero && u.getEmail().equals(autorEmail)) {
+                    if (u instanceof Viajero && u.getEmail().equals(emailAutor)) {
                         autor = (Viajero) u;
                         break;
                     }
                 }
 
                 Alojamiento alojamiento = null;
-                if (obj.has("alojamiento")) {
-                    int idAlojamiento = obj.getInt("alojamiento");
-                    for (Alojamiento a : gestorAlojamiento.listar()) {
-                        if (a.getId() == idAlojamiento) {
-                            alojamiento = a;
-                            break;
-                        }
+                for (Alojamiento a : gestorAlojamiento.listar()) {
+                    if (a.getId() == idAlojamiento) {
+                        alojamiento = a;
+                        break;
                     }
                 }
 
                 Anfitrion anfitrion = null;
-                if (obj.has("anfitrion")) {
-                    String emailAnfitrion = obj.getString("anfitrion");
-                    for (Usuario u : gestorUsuario.listar()) {
-                        if (u instanceof Anfitrion && u.getEmail().equals(emailAnfitrion)) {
-                            anfitrion = (Anfitrion) u;
-                            break;
-                        }
+                for (Usuario u : gestorUsuario.listar()) {
+                    if (u instanceof Anfitrion && u.getEmail().equals(emailAnfitrion)) {
+                        anfitrion = (Anfitrion) u;
+                        break;
                     }
                 }
 
                 Resenia r = new Resenia(id, puntaje, comentario, autor, fecha, alojamiento, anfitrion);
-                agregar(r);
 
+                agregar(r);
                 if (id > maxId) maxId = id;
             }
 
