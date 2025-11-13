@@ -120,6 +120,10 @@ classDiagram
         +verDetalle(): Text
         +cancelar(): void
     }
+    
+    class EstadoReserva {
+        
+    }
 
     class Pago {
         - Number id

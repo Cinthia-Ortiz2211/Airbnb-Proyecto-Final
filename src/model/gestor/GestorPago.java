@@ -115,4 +115,7 @@ public class GestorPago extends Gestor<Pago> implements Persistible {
             System.err.println("Error al cargar pagos: " + e.getMessage());
         }
     }
+
+    public void aprobar(Pago p) { p.setEstado(EstadoPago.APROBADO); }
+    public void rechazar(Pago p) { p.setEstado(EstadoPago.RECHAZADO); }
 }
