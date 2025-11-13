@@ -2,6 +2,9 @@ package model.gestor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import exception.CredencialesInvalidasException;
+import exception.UsuarioNoEncontradoException;
 import model.usuario.*;
 import contract.Persistible;
 import org.json.JSONException;
@@ -52,17 +55,18 @@ public class GestorUsuario extends Gestor<Usuario> implements Persistible {
     /**
      * Inicia sesión para un usuario existente.
      */
-    public Usuario iniciarSesion(String email, String contrasena) {
+    public Usuario iniciarSesion(String email, String contrasena)
+            throws UsuarioNoEncontradoException, CredencialesInvalidasException {
         for (Usuario u : elementos) {
             if (u.getEmail().equals(email)) {
                 if (u.iniciarSesion(email, contrasena)) {
                     return u;
                 } else {
-                    throw new RuntimeException("Contraseña incorrecta.");
+                    throw new CredencialesInvalidasException("La contraseña ingresada es incorrecta.");
                 }
             }
         }
-        throw new RuntimeException("Usuario no encontrado: " + email);
+        throw new UsuarioNoEncontradoException("No existe un usuario con el email: " + email);
     }
 
     /**

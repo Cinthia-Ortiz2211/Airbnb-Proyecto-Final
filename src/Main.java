@@ -1,3 +1,5 @@
+import exception.UsuarioNoEncontradoException;
+import exception.CredencialesInvalidasException;
 import model.pago.Pago;
 import model.reserva.EstadoReserva;
 import model.usuario.*;
@@ -15,6 +17,8 @@ import java.util.Scanner;
 
 import java.io.IOException;
 import java.nio.file.*;
+
+import exception.*;
 
 public class Main {
 
@@ -93,9 +97,7 @@ public class Main {
 
         System.out.println("Tipo de usuario (1=Admin, 2=Anfitrión, 3=Viajero): ");
         int tipo = Integer.parseInt(scanner.nextLine());
-        TipoUsuario tipoUsuario = tipo == 1 ? TipoUsuario.ADMINISTRADOR :
-                tipo == 2 ? TipoUsuario.ANFITRION :
-                        TipoUsuario.VIAJERO;
+        TipoUsuario tipoUsuario = tipo == 1 ? TipoUsuario.ADMINISTRADOR : tipo == 2 ? TipoUsuario.ANFITRION : TipoUsuario.VIAJERO;
 
         gestorUsuario.registrar(nombre, email, contrasena, telefono, tipoUsuario);
         System.out.println(" Usuario registrado correctamente.");
@@ -111,8 +113,10 @@ public class Main {
         try {
             usuarioActual = gestorUsuario.iniciarSesion(email, contrasena);
             System.out.println(" Sesión iniciada correctamente. Bienvenido, " + usuarioActual.getNombre() + " (" + usuarioActual.getTipoUsuario() + ")");
+        } catch (UsuarioNoEncontradoException | CredencialesInvalidasException e) {
+            System.err.println(" Error: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println(" " + e.getMessage());
+            System.err.println(" Error inesperado al iniciar sesión: " + e.getMessage());
         }
     }
 
@@ -154,13 +158,27 @@ public class Main {
             String opcion = scanner.nextLine();
 
             switch (opcion) {
-                case "1": crearCodigoDescuento(admin); break;
-                case "2": listarUsuarios(admin); break;
-                case "3": verPagos(); break;
-                case "4": actualizarPerfilUsuario(); break;
-                case "5": administrarPagos(); break;
-                case "0": cerrarSesion(); salir = true; break;
-                default: System.out.println("Opción no válida.");
+                case "1":
+                    crearCodigoDescuento(admin);
+                    break;
+                case "2":
+                    listarUsuarios(admin);
+                    break;
+                case "3":
+                    verPagos();
+                    break;
+                case "4":
+                    actualizarPerfilUsuario();
+                    break;
+                case "5":
+                    administrarPagos();
+                    break;
+                case "0":
+                    cerrarSesion();
+                    salir = true;
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
             }
         }
     }
@@ -178,11 +196,21 @@ public class Main {
             String opcion = scanner.nextLine();
 
             switch (opcion) {
-                case "1": crearAlojamiento(anfitrion); break;
-                case "2": listarAlojamientos(); break;
-                case "3": actualizarPerfilUsuario(); break;
-                case "0": cerrarSesion(); salir = true; break;
-                default: System.out.println("Opción no válida.");
+                case "1":
+                    crearAlojamiento(anfitrion);
+                    break;
+                case "2":
+                    listarAlojamientos();
+                    break;
+                case "3":
+                    actualizarPerfilUsuario();
+                    break;
+                case "0":
+                    cerrarSesion();
+                    salir = true;
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
             }
         }
     }
@@ -205,16 +233,36 @@ public class Main {
             String opcion = scanner.nextLine();
 
             switch (opcion) {
-                case "1": buscarAlojamientos(); break;
-                case "2": crearReserva(viajero); break;
-                case "3": cancelarReserva(viajero); break;
-                case "4": crearResenia(viajero); break;
-                case "5": verResenias(); break;
-                case "6": actualizarPerfilUsuario(); break;
-                case "7": verDetalleReserva(); break;
-                case "8": cambiarDestinoReserva(viajero); break;
-                case "0": cerrarSesion(); salir = true; break;
-                default: System.out.println("Opción no válida.");
+                case "1":
+                    buscarAlojamientos();
+                    break;
+                case "2":
+                    crearReserva(viajero);
+                    break;
+                case "3":
+                    cancelarReserva(viajero);
+                    break;
+                case "4":
+                    crearResenia(viajero);
+                    break;
+                case "5":
+                    verResenias();
+                    break;
+                case "6":
+                    actualizarPerfilUsuario();
+                    break;
+                case "7":
+                    verDetalleReserva();
+                    break;
+                case "8":
+                    cambiarDestinoReserva(viajero);
+                    break;
+                case "0":
+                    cerrarSesion();
+                    salir = true;
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
             }
         }
     }
@@ -273,9 +321,7 @@ public class Main {
         String direccion = scanner.nextLine();
         System.out.print("Tipo (1=Casa, 2=Departamento, 3=Habitación): ");
         int tipoNum = Integer.parseInt(scanner.nextLine());
-        TipoAlojamiento tipo = tipoNum == 1 ? TipoAlojamiento.CASA :
-                tipoNum == 2 ? TipoAlojamiento.DEPARTAMENTO :
-                        TipoAlojamiento.HABITACION;
+        TipoAlojamiento tipo = tipoNum == 1 ? TipoAlojamiento.CASA : tipoNum == 2 ? TipoAlojamiento.DEPARTAMENTO : TipoAlojamiento.HABITACION;
         System.out.print("Nivel: ");
         String nivel = scanner.nextLine();
         System.out.print("Descripción: ");
@@ -291,16 +337,7 @@ public class Main {
             disponibles.add(LocalDate.parse(linea));
         }
 
-        Alojamiento alojamiento = new Alojamiento(
-                gestorAlojamiento.listar().size() + 1,
-                direccion,
-                tipo,
-                nivel,
-                descripcion,
-                precio,
-                disponibles,
-                anfitrion
-        );
+        Alojamiento alojamiento = new Alojamiento(gestorAlojamiento.listar().size() + 1, direccion, tipo, nivel, descripcion, precio, disponibles, anfitrion);
 
         gestorAlojamiento.agregarAlojamiento(anfitrion, alojamiento);
         System.out.println(" Alojamiento registrado correctamente.");
@@ -312,7 +349,7 @@ public class Main {
         if (lista.isEmpty()) System.out.println("No hay alojamientos.");
         else for (int i = 0; i < lista.size(); i++) {
             Alojamiento a = lista.get(i);
-            System.out.println((i+1) + ". " + a.getDireccion() + " - " + a.getTipo() + " - $" + a.getPrecioPorNoche());
+            System.out.println((i + 1) + ". " + a.getDireccion() + " - " + a.getTipo() + " - $" + a.getPrecioPorNoche());
         }
     }
 
@@ -320,41 +357,55 @@ public class Main {
         System.out.println("\n=== Crear reserva ===");
         listarAlojamientos();
 
-        System.out.print("Seleccione número de alojamiento: ");
-        int num = Integer.parseInt(scanner.nextLine());
-        List<Alojamiento> alojamientos = gestorAlojamiento.listar();
-        if (num < 1 || num > alojamientos.size()) {
-            System.out.println("Opción inválida.");
-            return;
+        try {
+            System.out.print("Seleccione número de alojamiento: ");
+            int num = Integer.parseInt(scanner.nextLine());
+            List<Alojamiento> alojamientos = gestorAlojamiento.listar();
+
+            if (num < 1 || num > alojamientos.size()) {
+                throw new AlojamientoInvalidoException();
+            }
+
+            Alojamiento alojamiento = alojamientos.get(num - 1);
+            System.out.print("Código de descuento (Enter si no aplica): ");
+            String codigo = scanner.nextLine();
+
+            Reserva reserva = gestorReserva.crearReserva(viajero, alojamiento, LocalDate.now(), LocalDate.now().plusDays(3), codigo);
+            System.out.println(" Reserva creada. Total: $" + reserva.getCostoTotal());
+        } catch (AlojamientoInvalidoException e) {
+            System.err.println(" Error al crear la reserva: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println(" Error inesperado: " + e.getMessage());
         }
-
-        Alojamiento alojamiento = alojamientos.get(num - 1);
-        System.out.print("Código de descuento (Enter si no aplica): ");
-        String codigo = scanner.nextLine();
-
-        Reserva reserva = gestorReserva.crearReserva(viajero, alojamiento, LocalDate.now(), LocalDate.now().plusDays(3), codigo);
-        System.out.println(" Reserva creada. Total: $" + reserva.getCostoTotal());
     }
 
     private static void cancelarReserva(Viajero viajero) {
         System.out.println("\n=== Cancelar reserva ===");
-        List<Reserva> reservas = gestorReserva.listar();
-        if (reservas.isEmpty()) {
-            System.out.println("No hay reservas registradas.");
-            return;
-        }
-        for (int i = 0; i < reservas.size(); i++) {
-            System.out.println((i+1) + ". " + reservas.get(i).verDetalle());
-        }
 
-        System.out.print("Seleccione reserva a cancelar: ");
-        int num = Integer.parseInt(scanner.nextLine());
-        if (num < 1 || num > reservas.size()) {
-            System.out.println("Opción inválida.");
-            return;
+        try {
+            List<Reserva> reservas = gestorReserva.listar();
+            if (reservas.isEmpty()) {
+                System.out.println("No hay reservas registradas.");
+                return;
+            }
+            for (int i = 0; i < reservas.size(); i++) {
+                System.out.println((i + 1) + ". " + reservas.get(i).verDetalle());
+            }
+
+            System.out.print("Seleccione reserva a cancelar: ");
+            int num = Integer.parseInt(scanner.nextLine());
+
+            if (num < 1 || num > reservas.size()) {
+                throw new ReservaNoEncontradaException(num);
+            }
+
+            gestorReserva.cancelarReserva(viajero, reservas.get(num - 1));
+            System.out.println("Reserva cancelada.");
+        } catch (ReservaNoEncontradaException e) {
+            System.err.println(" Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println(" Error inesperado al cancelar reserva: " + e.getMessage());
         }
-        gestorReserva.cancelarReserva(viajero, reservas.get(num - 1));
-        System.out.println("Reserva cancelada.");
     }
 
     private static void crearResenia(Viajero viajero) {
@@ -438,9 +489,7 @@ public class Main {
             case "1":
                 System.out.print("Tipo (1=Casa, 2=Departamento, 3=Habitación): ");
                 int t = Integer.parseInt(scanner.nextLine());
-                TipoAlojamiento tipo = t == 1 ? TipoAlojamiento.CASA :
-                        t == 2 ? TipoAlojamiento.DEPARTAMENTO :
-                                TipoAlojamiento.HABITACION;
+                TipoAlojamiento tipo = t == 1 ? TipoAlojamiento.CASA : t == 2 ? TipoAlojamiento.DEPARTAMENTO : TipoAlojamiento.HABITACION;
                 filtrados = gestorAlojamiento.filtrarPorTipo(tipo);
                 break;
             case "2":
@@ -468,72 +517,95 @@ public class Main {
         List<Reserva> reservas = gestorReserva.listar();
 
         for (int i = 0; i < reservas.size(); i++)
-            System.out.println((i+1) + ". " + reservas.get(i).getId());
+            System.out.println((i + 1) + ". " + reservas.get(i).getId());
 
         System.out.print("Seleccione: ");
         int n = Integer.parseInt(scanner.nextLine());
 
-        System.out.println(reservas.get(n-1).verDetalle());
+        System.out.println(reservas.get(n - 1).verDetalle());
     }
 
     private static void cambiarDestinoReserva(Viajero viajero) {
         System.out.println("\n=== Cambiar destino de reserva ===");
 
-        List<Reserva> reservas = gestorReserva.listar();
+        try {
 
-        for (int i = 0; i < reservas.size(); i++) {
-            Reserva r = reservas.get(i);
-            if (r.getViajero().getId() == viajero.getId() &&
-                    r.getEstado() == EstadoReserva.PENDIENTE) {
-                System.out.println(r);
+            List<Reserva> reservas = gestorReserva.listar();
+
+            if (reservas.isEmpty()) {
+                throw new ReservaNoEncontradaException();
             }
+
+            for (int i = 0; i < reservas.size(); i++) {
+                Reserva r = reservas.get(i);
+                if (r.getViajero().getId() == viajero.getId() && r.getEstado() == EstadoReserva.PENDIENTE) {
+                    System.out.println(r);
+                }
+            }
+
+            System.out.print("Seleccione ID de reserva: ");
+            int id = Integer.parseInt(scanner.nextLine());
+            Reserva r = gestorReserva.buscarPorId(id);
+
+            if (r == null || r.getEstado() != EstadoReserva.PENDIENTE) {
+                throw new ReservaNoModificableException();
+            }
+
+            listarAlojamientos();
+
+            System.out.print("Nuevo alojamiento (número): ");
+            int num = Integer.parseInt(scanner.nextLine());
+            List<Alojamiento> alojamientos = gestorAlojamiento.listar();
+
+            if (num < 1 || num > alojamientos.size()) {
+                throw new AlojamientoInvalidoException();
+            }
+
+            Alojamiento nuevo = alojamientos.get(num - 1);
+
+            r.setAlojamiento(nuevo);
+            gestorReserva.guardarEnArchivo();
+            System.out.println("Destino actualizado.");
+        } catch (ReservaNoModificableException |
+                 ReservaNoEncontradaException |
+                 AlojamientoInvalidoException e) {
+            System.err.println(" Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println(" Error inesperado: " + e.getMessage());
         }
-
-        System.out.print("Seleccione ID de reserva: ");
-        int id = Integer.parseInt(scanner.nextLine());
-        Reserva r = gestorReserva.buscarPorId(id);
-
-        if (r == null || r.getEstado() != EstadoReserva.PENDIENTE) {
-            System.out.println("No puede modificarse.");
-            return;
-        }
-
-        listarAlojamientos();
-
-        System.out.print("Nuevo alojamiento (número): ");
-        int num = Integer.parseInt(scanner.nextLine());
-        List<Alojamiento> alojamientos = gestorAlojamiento.listar();
-
-        if (num < 1 || num > alojamientos.size()) {
-            System.out.println("Opción inválida.");
-            return;
-        }
-
-        Alojamiento nuevo = alojamientos.get(num - 1);
-
-        r.setAlojamiento(nuevo);
-        gestorReserva.guardarEnArchivo();
-        System.out.println("Destino actualizado.");
     }
 
     private static void administrarPagos() {
-        List<Pago> pagos = gestorPago.listar();
 
-        for (int i = 0; i < pagos.size(); i++)
-            System.out.println((i+1) + ". " + pagos.get(i));
+        try {
+            System.out.println("\n=== Administrar pagos ===");
+            List<Pago> pagos = gestorPago.listar();
 
-        System.out.print("Seleccione pago: ");
-        int n = Integer.parseInt(scanner.nextLine());
-        Pago p = pagos.get(n - 1);
+            for (int i = 0; i < pagos.size(); i++)
+                System.out.println((i + 1) + ". " + pagos.get(i));
 
-        System.out.println("1. Aprobar\n2. Rechazar");
-        String op = scanner.nextLine();
+            System.out.print("Seleccione pago: ");
+            int n = Integer.parseInt(scanner.nextLine());
+            Pago p = pagos.get(n - 1);
 
-        if (op.equals("1")) gestorPago.aprobar(p);
-        else gestorPago.rechazar(p);
 
-        gestorPago.guardarEnArchivo();
-        System.out.println("Pago actualizado.");
+            if (n < 1 || n > pagos.size()) {
+                throw new PagoNoEncontradoException();
+            }
+
+            System.out.println("1. Aprobar\n2. Rechazar");
+            String op = scanner.nextLine();
+
+            if (op.equals("1")) gestorPago.aprobar(p);
+            else gestorPago.rechazar(p);
+
+            gestorPago.guardarEnArchivo();
+            System.out.println("Pago actualizado.");
+        } catch (PagoNoEncontradoException e) {
+            System.err.println(" Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println(" Error inesperado al administrar pagos: " + e.getMessage());
+        }
     }
 
 }
