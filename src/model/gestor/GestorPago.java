@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GestorPago extends Gestor<Pago> implements Persistible {
 
-    private static final String ARCHIVO = "src/persistence/pagos.json";
+    private static final String ARCHIVO = "db/pagos.json";
     private GestorReserva gestorReserva;
 
 

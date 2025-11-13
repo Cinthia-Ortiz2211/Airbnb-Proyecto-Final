@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "reserva": 1,
+    "monto": 153.0,
+    "metodoPago": "TARJETA",
+    "fechaPago": "2025-11-14T09:30:00",
+    "estado": "APROBADO"
+  },
+  {
+    "id": 2,
+    "reserva": 2,
+    "monto": 45.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2025-11-18T17:00:00",
+    "estado": "APROBADO"
+  }
+]

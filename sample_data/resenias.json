@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "puntaje": 4,
+    "comentario": "Muy linda la casa, aunque Bart no paraba de hacer travesuras y Homero se comió todas las rosquillas.",
+    "autor": "marge@familiasimpson.com",
+    "fecha": "2025-11-18T09:00:00",
+    "alojamiento": 1,
+    "anfitrion": "ned@okilydokily.com"
+  },
+  {
+    "id": 2,
+    "puntaje": 3,
+    "comentario": "El cuarto está bien, pero a las tres de la mañana se escuchaban los ronquidos de Barney. Moe fue amable eso sí.",
+    "autor": "homero@duffmail.com",
+    "fecha": "2025-11-21T10:30:00",
+    "alojamiento": 2,
+    "anfitrion": "moe@tabernademoe.com"
+  }
+]

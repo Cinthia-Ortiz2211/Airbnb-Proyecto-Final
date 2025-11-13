@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "alojamiento": 1,
+    "viajero": "homero@duffmail.com",
+    "fechaInicio": "2025-11-15",
+    "fechaFin": "2025-11-17",
+    "costoTotal": 153.0,
+    "codigoDescuento": "DUFF10",
+    "estado": "CONFIRMADA",
+    "pendiente": false
+  },
+  {
+    "id": 2,
+    "alojamiento": 2,
+    "viajero": "marge@familiasimpson.com",
+    "fechaInicio": "2025-11-19",
+    "fechaFin": "2025-11-20",
+    "costoTotal": 45.0,
+    "codigoDescuento": null,
+    "estado": "CONFIRMADA",
+    "pendiente": false
+  }
+]

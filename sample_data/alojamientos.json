@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "direccion": "Av. Siempreviva 742",
+    "tipo": "CASA",
+    "nivel": "Familiar",
+    "descripcion": "La clásica casa amarilla de los Simpson. Cuenta con jardín, sótano misterioso y una parrilla que Homero usa para quemar hamburguesas.",
+    "precioPorNoche": 85.0,
+    "fechasDisponibles": ["2025-11-15", "2025-11-16", "2025-11-17"],
+    "anfitrionId": 3
+  },
+  {
+    "id": 2,
+    "direccion": "Taberna de Moe, segundo piso",
+    "tipo": "HABITACION",
+    "nivel": "Económico",
+    "descripcion": "Una habitación sencilla justo arriba de la taberna. Ideal si no te molesta el olor a cerveza ni los gritos de Barney.",
+    "precioPorNoche": 45.0,
+    "fechasDisponibles": ["2025-11-18", "2025-11-19", "2025-11-20"],
+    "anfitrionId": 2
+  }
+]
+

@@ -14,7 +14,7 @@ import org.json.JSONObject;
  */
 public class GestorUsuario extends Gestor<Usuario> implements Persistible {
 
-    private static final String ARCHIVO = "src/persistence/usuarios.json";
+    private static final String ARCHIVO = "db/usuarios.json";
 
     public GestorUsuario() {
         super();
