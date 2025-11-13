@@ -18,6 +18,7 @@ public class Reserva implements Identificable {
     private LocalDate fechaFin;
     private double costoTotal;
     private boolean pendiente;
+    private EstadoReserva estadoReserva;
 
 
     public Reserva(Alojamiento alojamiento, Viajero viajero,
@@ -29,6 +30,7 @@ public class Reserva implements Identificable {
         this.fechaFin = fechaFin;
         this.pendiente = pendiente;
         this.costoTotal = calcularCosto();
+        this.estadoReserva = EstadoReserva.PENDIENTE;
     }
 
     public Reserva(int id, Alojamiento alojamiento, Viajero viajero,
@@ -41,6 +43,7 @@ public class Reserva implements Identificable {
         this.fechaFin = fechaFin;
         this.pendiente = pendiente;
         this.costoTotal = calcularCosto();
+        this.estadoReserva = EstadoReserva.PENDIENTE;
     }
 
     public Reserva(Alojamiento alojamiento, Viajero viajero,
@@ -52,6 +55,7 @@ public class Reserva implements Identificable {
         this.fechaFin = fechaFin;
         this.costoTotal = costoTotal;
         this.pendiente = true;
+        this.estadoReserva = EstadoReserva.PENDIENTE;
     }
 
     public Reserva(int id, Alojamiento alojamiento, Viajero viajero,
@@ -64,6 +68,7 @@ public class Reserva implements Identificable {
         this.fechaFin = fechaFin;
         this.costoTotal = costoTotal;
         this.pendiente = true;
+        this.estadoReserva = EstadoReserva.PENDIENTE;
     }
 
 
@@ -74,6 +79,7 @@ public class Reserva implements Identificable {
     public LocalDate getFechaFin() { return fechaFin; }
     public double getCostoTotal() { return costoTotal; }
     public boolean isPendiente() { return pendiente; }
+    public EstadoReserva getEstado() { return estadoReserva; }
 
 
     public double calcularCosto() {
@@ -98,6 +104,13 @@ public class Reserva implements Identificable {
                 (pendiente ? "Pendiente" : "Confirmada/Cancelada");
     }
 
+    public void setAlojamiento(Alojamiento nuevoAlojamiento) {
+        if (this.estadoReserva != EstadoReserva.PENDIENTE) {
+            throw new IllegalStateException("Solo se puede cambiar el alojamiento si la reserva está pendiente.");
+        }
+        this.alojamiento = nuevoAlojamiento;
+        this.costoTotal = calcularCosto();
+    }
 
     public static void actualizarContador(int ultimoId) {
         if (ultimoId > contador) contador = ultimoId;

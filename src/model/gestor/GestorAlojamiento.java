@@ -71,9 +71,7 @@ public class GestorAlojamiento extends Gestor<Alojamiento> implements Persistibl
                 json.put("precioPorNoche", a.getPrecioPorNoche());
 
                 JSONArray fechas = new JSONArray();
-                for (LocalDate f : a.getFechasDisponibles()) {
-                    fechas.put(f.toString());
-                }
+                for (LocalDate f : a.getFechasDisponibles()) fechas.put(f.toString());
                 json.put("fechasDisponibles", fechas);
 
                 json.put("anfitrion", a.getAnfitrion() != null ? a.getAnfitrion().getEmail() : JSONObject.NULL);
@@ -106,9 +104,10 @@ public class GestorAlojamiento extends Gestor<Alojamiento> implements Persistibl
                 double precio = obj.getDouble("precioPorNoche");
 
                 List<LocalDate> fechas = new ArrayList<>();
-                JSONArray arrFechas = obj.getJSONArray("fechasDisponibles");
-                for (int j = 0; j < arrFechas.length(); j++) {
-                    fechas.add(LocalDate.parse(arrFechas.getString(j)));
+                JSONArray arr =obj.optJSONArray("fechasDisponibles");
+                if (arr != null) {
+                    for (int j = 0; j < arr.length(); j++)
+                        fechas.add(LocalDate.parse(arr.getString(j)));
                 }
 
                 String emailAnfitrion = obj.optString("anfitrion", null);
@@ -134,6 +133,24 @@ public class GestorAlojamiento extends Gestor<Alojamiento> implements Persistibl
         } catch (JSONException e) {
             System.err.println("Error al cargar alojamientos: " + e.getMessage());
         }
+    }
+
+    public List<Alojamiento> filtrarPorTipo(TipoAlojamiento tipo) {
+        return elementos.stream()
+                .filter(a -> a.getTipo() == tipo)
+                .toList();
+    }
+
+    public List<Alojamiento> filtrarPorPrecio(double max) {
+        return elementos.stream()
+                .filter(a -> a.getPrecioPorNoche() <= max)
+                .toList();
+    }
+
+    public List<Alojamiento> filtrarPorDisponibilidad(LocalDate fecha) {
+        return elementos.stream()
+                .filter(a -> a.getFechasDisponibles().contains(fecha))
+                .toList();
     }
 
 

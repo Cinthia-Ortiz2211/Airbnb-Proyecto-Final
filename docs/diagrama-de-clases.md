@@ -121,6 +121,13 @@ classDiagram
         +cancelar(): void
     }
 
+    class EstadoReserva {
+        <<enumeration>>
+        PENDIENTE
+        CONFIRMADA
+        CANCELADA
+    }
+
     class Pago {
         - Number id
         - Reserva reserva
