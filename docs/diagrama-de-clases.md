@@ -120,9 +120,12 @@ classDiagram
         +verDetalle(): Text
         +cancelar(): void
     }
-    
+
     class EstadoReserva {
-        
+        <<enumeration>>
+        PENDIENTE
+        CONFIRMADA
+        CANCELADA
     }
 
     class Pago {
